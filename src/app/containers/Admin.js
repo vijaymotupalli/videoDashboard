@@ -18,8 +18,7 @@ class Admin extends React.Component {
     render(){
         const {match} = this.props
         return (
-            <div>
-                <div className="header">Welcome To Video Upload</div>
+            <div className="totalBlock">
                 <div ><Route  component={Menu} /></div>
                 <div  id="toggleMenu">
                     <Route exact  path= {match.url+'/videos' } component={Videos} />

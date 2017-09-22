@@ -1,9 +1,10 @@
-import {SET_VIDEOS, SELECTED_VIDEO, SET_PROGRESS} from '../actions/types'
+import {SET_VIDEOS, SELECTED_VIDEO, SET_PROGRESS,SET_VIDEO_ERROR} from '../actions/types'
 
 export default function VideoReducer(state = {
     videos: [],
     selectedVideo: "",
-    progress: 0
+    progress: 0,
+    videoError:""
 }, action) {
     switch (action.type) {
         case SELECTED_VIDEO:
@@ -16,6 +17,12 @@ export default function VideoReducer(state = {
             return state = {
                 ...state,
                 progress: action.payload
+            };
+            break;
+        case SET_VIDEO_ERROR:
+            return state = {
+                ...state,
+                videoError: action.payload
             };
             break;
         case SET_VIDEOS:

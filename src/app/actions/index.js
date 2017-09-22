@@ -1,6 +1,6 @@
-import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_VIDEOS,SET_MY_PROFILE,SET_PROGRESS} from './types'
+import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_VIDEOS,SET_MY_PROFILE,SET_PROGRESS,SET_VIDEO_ERROR} from './types'
 import {post,get,put} from "../service/api";
-import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL} from "../service/apiurls"
+import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL} from "../service/apiurls"
 import {LOGIN_TOKEN_TYPE,ADMIN_TOKEN_TYPE} from "../service/tokenTypes"
 
 import btoa from "btoa"
@@ -35,7 +35,13 @@ export function setLoginError(loginError) {
         loginError
     }
 }
-export function selectedVideo(video) {
+export function setVideoError(videoError) {
+    return {
+        type: SET_VIDEO_ERROR ,
+        payload:videoError
+    }
+}
+export function setSelectedVideo(video) {
     return {
         type: SELECTED_VIDEO,
         payload:video
@@ -183,4 +189,23 @@ export function uploadVideo(file) {
     }
 
 }
+
+export function editVideo(video) {
+    return  dispatch => {
+        return new Promise (function (resolve,reject) {
+            var authToken = ADMIN_TOKEN_TYPE+" "+localStorage.getItem("loginuser")
+            put(EDIT_VIDEO_URL+"/"+video.videoId,authToken,video).then(function (video) {
+                dispatch(getVideos());
+                resolve()
+            },function (error) {
+                if (error.response) {
+                    console.log("----error in Edit Video-------",error)
+                    reject(error.response)
+                }
+            });
+        })
+
+    }
+}
+
 

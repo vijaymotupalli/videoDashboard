@@ -47,7 +47,6 @@ class Login extends React.Component {
                                        onChange={e => this.setState({password: e.target.value})} value={this.state.password}/>
                                 <i className="mdi mdi-lock" />
                             </div>
-
                             <div className="form-group text-center">
                                 <button className="btn btn-primary">Login</button>
                             </div>

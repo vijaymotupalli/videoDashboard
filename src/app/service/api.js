@@ -17,10 +17,10 @@ export function post(url,token,body) {
     })
 
 }
-export function get(url,token) {
+export function get(url,token,params) {
     axios.defaults.headers.common['Authorization'] = token
     return new Promise (function (resolve,reject) {
-        axios.get(url)
+        axios.get(url,{params:params})
             .then(function (response,err) {
                 if(!err)resolve(response.data)
 
@@ -31,10 +31,10 @@ export function get(url,token) {
     })
 
 }
-export function put(url,token,body) {
+export function put(url,token,body,params) {
     axios.defaults.headers.common['Authorization'] = token
     return new Promise (function (resolve,reject) {
-        axios.put(url, body)
+        axios.put(url, body,{params:params})
             .then(function (response,err) {
                 if(!err)resolve(response)
 

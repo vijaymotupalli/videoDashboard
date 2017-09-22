@@ -17,20 +17,26 @@ class Menu extends React.Component {
     render() {
         const {match} = this.props
         return (
-            <div className="container-fluid">
-                <div id="mySidenav" className="sidenav">
-                    <div className="mainLinks">
-                        <NavLink to={match.url+'/myprofile'}  activeClassName="active"  exact> My Profile </NavLink>
-                        <NavLink to={match.url+'/videos'}  activeClassName="active"  exact> Videos </NavLink>
-                        <NavLink to="/" activeClassName="active" onClick={this.onSignout} exact> Signout </NavLink>
+            <div>
+                <div className="header">Welcome To Video Upload</div>
+                <div className="container-fluid">
+                    <div id="mySidenav" className="sidenav">
+                        <div className="mainLinks">
+                            <NavLink to={match.url + '/myprofile'} activeClassName="active" exact><span
+                                className="glyphicon glyphicon-user"/> My Profile </NavLink>
+                            <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
+                                className="glyphicon glyphicon-facetime-video"/> Videos </NavLink>
+                            <NavLink to="/" activeClassName="active" onClick={this.onSignout} exact><span
+                                className="glyphicon glyphicon-off"/> Signout </NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
+
         )
     }
 
 }
-
 
 
 const mapStateToProps = (state) => {
@@ -44,10 +50,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch)=> {
 
-    return {
-
-    };
+    return {};
 
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Menu);
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
