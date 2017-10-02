@@ -2,7 +2,7 @@ import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_V
     SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS} from './types'
 import {post,get,put,_delete} from "../service/api";
 import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,
-SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL} from "../service/apiurls"
+SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER} from "../service/apiurls"
 import {LOGIN_TOKEN_TYPE,ADMIN_TOKEN_TYPE} from "../service/tokenTypes"
 
 import btoa from "btoa"
@@ -433,16 +433,19 @@ export function getUserDetails(email) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
+export function applyFilter(filterData) {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+        post(APPLY_FILTER,authToken,filterData).then(function (videos) {
+            dispatch(setVideos(videos));
+        }, function (error) {
+            if (error.response) {
+                console.log("----error in apply filter videos-------",error)
+            }
+        });
+    }
+}
 
 
 

@@ -5,6 +5,8 @@ import './styles.css';
 import Addvideo from './AddVideo'
 import EditVideo from './EditVideo'
 
+import ApplyFilter from './ApplyFilter'
+
 import {connect} from "react-redux";
 
 class Videos extends React.Component {
@@ -41,6 +43,10 @@ class Videos extends React.Component {
 
                 </div>
 
+                <div className="filter">
+                    <ApplyFilter/>
+                </div>
+
                 {this.props.videos.length > 0 && this.props.videos.map((video)=> {
                     return (
                             <div className="container, col-sm-4" key={video._id} style={{textAlign:"left"}}>
@@ -59,22 +65,36 @@ class Videos extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="panel-body">
+                                     <div className="panel-body">
                                         <video  controls className="videoDisplay">
                                             <source src={video.url}/>
                                         </video>
                                         </div>
                                     <div className="panel-footer">
+                                        {this.state.superAdmin && <div className="row">
+                                            <div className="col-sm-2">
+                                                <p ><strong>Url : </strong></p>
+                                            </div>
+                                            <div className="col-sm-10">
+                                              <input type="text" className="form-control" disabled value={video.url}/>
+                                            </div>
+                                        </div>}
                                         <div className="row">
                                             <div className="col-sm-8">
-                                                <p >Subject : <strong ><span
+                                                <p ><strong>Subject :</strong> <strong ><span
                                                     className="label label-primary">{video.subject.name}</span></strong> </p>
                                             </div>
                                         </div>
+                                        {this.state.superAdmin && <div className="row">
+                                            <div className="col-sm-8">
+                                                <p ><strong>School : </strong><strong ><span
+                                                    className="label label-info">{video.school ? video.school.name :"No School"}</span></strong> </p>
+                                            </div>
+                                        </div> }
                                         <div className="row">
                                             <div className="col-sm-8">
-                                                <p >Standard : <strong><span style={{marginLeft:"auto"}}
-                                                                             className="label label-warning">{video.standard.name}</span></strong> </p>
+                                                <p ><strong>Standard : </strong><strong><span style={{marginLeft:"auto"}}
+                                                                             className="label label-success">{video.standard.name}</span></strong> </p>
                                             </div>
                                             <div className="col-sm-4">
                                                 <button type="button" className="btn btn-default btn-sm" onClick={()=> {

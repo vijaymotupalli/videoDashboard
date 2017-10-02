@@ -1,5 +1,6 @@
 export const LOGIN_URL = 'api/login';
 export const GET_VIDEOS_URL = 'api/videos';
+export const APPLY_FILTER = 'api/videos/applyfilter';
 export const GET_MY_PROFILE_URL = 'api/myprofile';
 export const UPLOAD_VIDEO_URL = 'http://13.126.220.44:9000/api/uploadvideo';
 export const POST_VIDEO_URL = 'api/videos';

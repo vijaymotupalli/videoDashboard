@@ -10,6 +10,7 @@ import Users from './Users'
 import UserDetails from './UserDetails'
 import { BrowserRouter,Route ,Redirect} from 'react-router-dom'
 import './styles.css'
+import SelectDemo from './ApplyFilter'
 
 class Admin extends React.Component {
     constructor(props) {
