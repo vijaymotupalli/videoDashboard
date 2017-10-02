@@ -3,11 +3,16 @@ import {connect} from "react-redux";
 import './styles.css';
 import {getUsers,selectedUserData,deleteAdmin} from "../actions/index";
 import Newadd from './newaddUser'
+import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
+
+import 'style-loader!react-confirm-alert/src/react-confirm-alert.css'
+
 import {Route, Link, Switch} from 'react-router-dom';
 
 class User extends React.Component {
     constructor(props) {
         super(props);
+        this.onDeleteUser = this.onDeleteUser.bind(this);
     }
     componentDidMount() {
         this.props.getUsers();
@@ -17,6 +22,18 @@ class User extends React.Component {
         this.props.selectedUserData(user);
         history.push(this.props.match.url+"/"+user.email)
     }
+
+    onDeleteUser(userId){
+        confirmAlert({
+            title: 'Confirm To Delete',                        // Title dialog
+            message: 'Are you sure to do this.',               // Message dialog
+            confirmLabel: 'Confirm',                           // Text button confirm
+            cancelLabel: 'Cancel',                             // Text button cancel
+            onConfirm: () => this.props.deleteAdmin(userId)   // Action after Confirm
+        })
+
+    }
+
     render() {
         var users = this.props.users
         var listUsers = users.map(function (user) {
@@ -28,7 +45,7 @@ class User extends React.Component {
                     <td>{user.school ? "School" : "User"}</td>
                     <td>{user.createdAt}</td>
                     <td>
-                        <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.props.deleteAdmin(user._id)}}>Remove</button>
+                        <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteUser(user._id)}}>Remove</button>
                     </td>
                 </tr>
             );

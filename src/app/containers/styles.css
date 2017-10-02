@@ -259,7 +259,11 @@ div.dataTables_wrapper div.dataTables_info {
 }
 .videoDisplay{
     width: 100%;
-    max-height: 135px;
+    height: 135px;
+}
+.notFound{
+    margin-left: 33%;
+    margin-top: 20%;
 }
 
 .sidenav a {

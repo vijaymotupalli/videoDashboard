@@ -432,18 +432,30 @@ export function getUserDetails(email) {
     }
 }
 
+export function setLoader(value) {
+    return {
+        type: "SET_LOADER",
+        payload:value
+    }
+
+}
 
 export function applyFilter(filterData) {
     var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
-        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
-        post(APPLY_FILTER,authToken,filterData).then(function (videos) {
-            dispatch(setVideos(videos));
-        }, function (error) {
-            if (error.response) {
-                console.log("----error in apply filter videos-------",error)
-            }
-        });
+        return new Promise (function (resolve,reject) {
+            var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+            post(APPLY_FILTER,authToken,filterData).then(function (videos) {
+                dispatch(setVideos(videos));
+                resolve("Success");
+            }, function (error) {
+                if (error.response) {
+                    console.log("----error in apply filter videos-------",error)
+                    reject(error.response)
+                }
+                reject(error)
+            });
+        })
     }
 }
 

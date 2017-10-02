@@ -4,13 +4,20 @@ export default function VideoReducer(state = {
     videos: [],
     selectedVideo: "",
     progress: 0,
-    videoError:""
+    videoError:"",
+    loader:false
 }, action) {
     switch (action.type) {
         case SELECTED_VIDEO:
             return state = {
                 ...state,
                 selectedVideo: action.payload
+            }
+            break;
+        case "SET_LOADER":
+            return state = {
+                ...state,
+                loader: action.payload
             }
             break;
         case SET_PROGRESS:

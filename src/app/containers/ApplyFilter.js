@@ -1,6 +1,6 @@
 import React from "react"
 import {Route, Link, Switch} from 'react-router-dom';
-import {applyFilter, getSchools, getStandards, getSubjects} from "../actions/index";
+import {applyFilter, getSchools, getStandards, getSubjects,setLoader} from "../actions/index";
 import './styles.css';
 import Select from 'react-select'
 import 'style-loader!react-select/dist/react-select.css';
@@ -41,7 +41,12 @@ class SelectDemo extends React.Component {
        var standard = this.state.standardValues ?  this.state.standardValues.split(",") :[]
        var school = this.state.schoolValues ? this.state.schoolValues.split(",") :[]
        var subject = this.state.subjectValues ? this.state.subjectValues.split(",") :[]
-        this.props.applyFilter({standard,school,subject})
+        this.props.setLoader(true);
+        this.props.applyFilter({standard,school,subject}).then( (result)=> {
+           this.props.setLoader(false)
+        }, (error)=> {
+            if(error)this.props.setLoader(false);
+        })
     }
 
     handleStandardChange (value) {
@@ -129,6 +134,7 @@ const mapDispatchToProps = (dispatch)=> {
         getStandards: ()=> dispatch(getStandards()),
         getSubjects: ()=> dispatch(getSubjects()),
         applyFilter: (filterData)=> dispatch(applyFilter(filterData)),
+        setLoader: (value)=> dispatch(setLoader(value)),
 
     };
 
