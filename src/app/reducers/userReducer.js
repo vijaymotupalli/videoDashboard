@@ -1,7 +1,13 @@
 const userReducer = (state = {
-    users: [],error:"",userDataClear:false,selectedUser:"",userTasks:"",roles:"",selectedUserLog:""
+    admins: [],error:"",adminDataClear:false,selectedAdmin:"",users:[],selectedUser:""
 }, action) => {
     switch (action.type) {
+        case "SET_ADMINS_DATA":
+            state = {
+                ...state,
+                admins: action.payload
+            };
+            break;
         case "SET_USERS_DATA":
             state = {
                 ...state,
@@ -14,10 +20,16 @@ const userReducer = (state = {
                 error: action.payload
             };
             break;
+        case "SET_ADMIN_ERROR":
+            state = {
+                ...state,
+                error: action.payload
+            };
+            break;
         case "CLEAR_USER_DATA":
         state = {
             ...state,
-            userDataClear: action.payload
+            adminDataClear: action.payload
         };
         break;
         case "SELECTED_USER_DATA":
@@ -26,30 +38,16 @@ const userReducer = (state = {
                 selectedUser: action.payload
             };
             break;
-        case "SELECTED_USER_LOG":
+        case "SELECTED_ADMIN_DATA":
             state = {
                 ...state,
-                selectedUserLog: action.payload
+                selectedAdmin: action.payload
             };
             break;
-        case "SET_USER_TASKS":
-            state = {
-                ...state,
-                userTasks: action.payload
-            };
-            break;
-        case "SET_ROLES_DATA":
-            state = {
-                ...state,
-                roles: action.payload
-            };
-            break;
-        case "SET_MODAL_STATUS":
-            state = {
-                ...state,
-                boardAddModalShow: action.payload
-            };
-            break;
+        
+       
+        
+        
     }
     return state;
 };

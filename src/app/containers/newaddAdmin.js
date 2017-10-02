@@ -1,5 +1,5 @@
 import React from "react";
-import {addUser,setUserError,getSchools} from "../actions/index";
+import {addAdmin,setAdminError,getSchools} from "../actions/index";
 import {connect} from "react-redux";
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './styles.css';
@@ -24,12 +24,12 @@ class Adduser extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         this.setState({error:""})
-        this.props.setUserError("");
+        this.props.setAdminError("");
         const {email, name,password,phone,address,school} = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-           this.props.addUser({email: email, name: name, password:password,school:school,phone:phone,address:address}).then((result,err)=> {
+           this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address}).then((result,err)=> {
                if(!err){
                    this.setState({
                        email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false
@@ -53,7 +53,7 @@ class Adduser extends React.Component {
                             <div className="modal-content">
                                 <div className="modal-header">
                                     <button type="button" className="close" data-dismiss="modal">&times;</button>
-                                    <h4 className="modal-title">Add User</h4>
+                                    <h4 className="modal-title">Add Admin</h4>
                                 </div>
                                 <div className="modal-body">
                                     <form>
@@ -128,7 +128,7 @@ class Adduser extends React.Component {
                                                         </div>
                                                         <div className="radio">
                                                             <label>
-                                                                <input type="radio" value="user" name="isSchool" onClick={(e)=>this.setState({isSchool:false})} />
+                                                                <input type="radio" value="admin" name="isSchool" onClick={(e)=>this.setState({isSchool:false})} />
                                                                 User
                                                             </label>
                                                         </div>
@@ -153,7 +153,7 @@ class Adduser extends React.Component {
                                     <div className="text-center">
                                         <label className="errorcolor">
                                             { this.state.error && <div>{this.state.error}</div>  }
-                                            { this.props.userError && <div>{ this.props.userError}</div>}
+                                            { this.props.adminError && <div>{ this.props.adminError}</div>}
                                         </label>
                                     </div>
                                 </div>
@@ -180,17 +180,17 @@ class Adduser extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        userError: state.User.error,
+        adminError: state.User.error,
         schools:state.Data.schools,
-        userDataClear:state.User.userDataClear,
+        adminDataClear:state.User.adminDataClear,
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getSchools: ()=> dispatch(getSchools()),
-        addUser: (user) => dispatch(addUser(user)),
-        setUserError: (error) => dispatch(setUserError(error)),
+        addAdmin: (admin) => dispatch(addAdmin(admin)),
+        setAdminError: (error) => dispatch(setAdminError(error)),
     };
 }
 

@@ -14,6 +14,8 @@ export const STANDARDS = 'data/standards';
 export const SCHOOLS = 'data/schools';
 //export const ADD_SCHOOL = 'data/schools';
 
+export const APP_USERS = 'app/users'
+
 export const GET_USERS_URL = 'api/users'
 export const POST_USERS_URL = 'api/users'
 export const DELETE_USERS_URL = 'api/users'

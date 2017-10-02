@@ -1,8 +1,8 @@
 import React from "react";
 import {connect} from "react-redux";
 import './styles.css';
-import {getUsers,selectedUserData,deleteUser} from "../actions/index";
-import Newadd from './newAddUser'
+import {getAdmins,selectedAdminData,deleteAdmin} from "../actions/index";
+import Newadd from './newaddAdmin'
 import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
 
 import 'style-loader!react-confirm-alert/src/react-confirm-alert.css'
@@ -12,40 +12,40 @@ import {Route, Link, Switch} from 'react-router-dom';
 class User extends React.Component {
     constructor(props) {
         super(props);
-        this.onDeleteUser = this.onDeleteUser.bind(this);
+        this.onDeleteAdmin = this.onDeleteAdmin.bind(this);
     }
     componentDidMount() {
-        this.props.getUsers();
+        this.props.getAdmins();
     }
-    selectedUser(user){
+    selectedAdmin(admin){
         const {context,history} = this.props
-        this.props.selectedUserData(user);
-        history.push(this.props.match.url+"/"+user._id)
+        this.props.selectedAdminData(admin);
+        history.push(this.props.match.url+"/"+admin.email)
     }
 
-    onDeleteUser(userId){
+    onDeleteAdmin(userId){
         confirmAlert({
             title: 'Confirm To Delete',                        // Title dialog
             message: 'Are you sure to do this.',               // Message dialog
             confirmLabel: 'Confirm',                           // Text button confirm
             cancelLabel: 'Cancel',                             // Text button cancel
-            onConfirm: () => this.props.deleteUser(userId)   // Action after Confirm
+            onConfirm: () => this.props.deleteAdmin(userId)   // Action after Confirm
         })
 
     }
 
     render() {
-        var users = this.props.users
-        var listUsers = users.map(function (user) {
+        var admins = this.props.admins
+        var listAdmins = admins.map(function (admin) {
             return (
-                <tr key={user._id} onClick={()=>this.selectedUser(user)}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.phone}</td>
-                    <td>{user.school ? "School" : "User"}</td>
-                    <td>{user.createdAt}</td>
+                <tr key={admin._id} onClick={()=>this.selectedAdmin(admin)}>
+                    <td>{admin.name}</td>
+                    <td>{admin.email}</td>
+                    <td>{admin.phone}</td>
+                    <td>{admin.school ? "School" : "User"}</td>
+                    <td>{admin.createdAt}</td>
                     <td>
-                        <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteUser(user._id)}}>Remove</button>
+                        <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteAdmin(admin._id)}}>Remove</button>
                     </td>
                 </tr>
             );
@@ -55,11 +55,11 @@ class User extends React.Component {
                 <div>
                     <Newadd/>
                     <div className="row" id="title">
-                        <div className="col-sm-10" id="userslist">Users List</div>
+                        <div className="col-sm-10" id="userslist">Admins List</div>
                         <div className="col-sm-2" >
                             <button type="button" className="btn btn-info btn-sm" data-toggle="modal"
                                     data-target="#myUserAddModal">
-                                <span className="glyphicon glyphicon-plus"/> Add User
+                                <span className="glyphicon glyphicon-plus"/> Add Admin
                             </button>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ class User extends React.Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {listUsers }
+                            {listAdmins }
                             </tbody>
                         </table>
                     </div>
@@ -88,16 +88,16 @@ class User extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        users: state.User.users,
-        selectedUser: state.User.selectedUser
+        admins: state.User.admins,
+        selectedAdmin: state.User.selectedAdmin
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getUsers: () => dispatch(getUsers()),
-        selectedUserData: (data) => dispatch(selectedUserData(data)),
-        deleteUser: (userId) => dispatch(deleteUser(userId)),
+        getAdmins: () => dispatch(getAdmins()),
+        selectedAdminData: (data) => dispatch(selectedAdminData(data)),
+        deleteAdmin: (adminId) => dispatch(deleteAdmin(adminId)),
     };
 }
 

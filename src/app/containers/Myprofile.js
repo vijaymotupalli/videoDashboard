@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import './styles.css';
 import {getMyProfile,selectedUserData} from "../actions/index";
 import  moment from 'moment'
-import EditUser from './editUser'
+import EditUser from './editAdmin'
 
 class Myprofile extends React.Component {
     constructor(props) {

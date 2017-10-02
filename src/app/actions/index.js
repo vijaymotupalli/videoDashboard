@@ -2,7 +2,7 @@ import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_V
     SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS} from './types'
 import {post,get,put,_delete} from "../service/api";
 import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,
-SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER} from "../service/apiurls"
+SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER,APP_USERS} from "../service/apiurls"
 import {LOGIN_TOKEN_TYPE,ADMIN_TOKEN_TYPE} from "../service/tokenTypes"
 
 import btoa from "btoa"
@@ -137,7 +137,7 @@ export function getRoles() {
     }
 }
 
-export function clearUserData(flag) {
+export function clearAdminData(flag) {
 
     return {
         type: "CLEAR_USER_DATA",
@@ -145,6 +145,13 @@ export function clearUserData(flag) {
     }
 }
 
+export function setAdminError(userError) {
+
+    return {
+        type: "SET_ADMIN_ERROR",
+        payload:userError
+    }
+}
 export function setUserError(userError) {
 
     return {
@@ -152,6 +159,30 @@ export function setUserError(userError) {
         payload:userError
     }
 }
+export function addAdmin(admin) {
+    console.log("---admin----",admin)
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        return new Promise (function (resolve,reject) {
+            var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+            post(POST_USERS_URL,authToken,admin)
+                .then(function (response,err) {
+                    dispatch(getAdmins());
+                    dispatch(clearAdminData(true))
+                    dispatch(setAdminError(""));
+                    resolve()
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        dispatch(setAdminError(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg))
+                    }
+                    reject()
+                });
+        })
+
+    }
+}
+
 
 export function addUser(user) {
     console.log("---user----",user)
@@ -159,10 +190,9 @@ export function addUser(user) {
     return  dispatch => {
         return new Promise (function (resolve,reject) {
             var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
-            post(POST_USERS_URL,authToken,user)
+            post(APP_USERS,authToken,user)
                 .then(function (response,err) {
                     dispatch(getUsers());
-                    dispatch(clearUserData(true))
                     dispatch(setUserError(""));
                     resolve()
                 })
@@ -177,17 +207,39 @@ export function addUser(user) {
     }
 }
 
+
+export function editAdmin(userId,admin) {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        return new Promise (function (resolve,reject) {
+            var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+            put(GET_USER_DETAILS_URL+"/"+userId,authToken,admin)
+                .then(function (response,err) {
+                    dispatch(getMyProfile());
+                    dispatch(getAdminDetails(userId));
+                    dispatch(clearAdminData(true))
+                    dispatch(setAdminError(""));
+                    resolve()
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        dispatch(setAdminError(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg))
+                    }
+                    reject()
+                });
+        })
+
+    }
+}
 
 export function editUser(userId,user) {
     var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
         return new Promise (function (resolve,reject) {
             var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
-            put(GET_USER_DETAILS_URL+"/"+userId,authToken,user)
+            put(APP_USERS+"/"+userId,authToken,user)
                 .then(function (response,err) {
-                    dispatch(getMyProfile());
                     dispatch(getUserDetails(userId));
-                    dispatch(clearUserData(true))
                     dispatch(setUserError(""));
                     resolve()
                 })
@@ -201,13 +253,6 @@ export function editUser(userId,user) {
 
     }
 }
-
-
-
-
-
-
-
 
 
 
@@ -222,6 +267,25 @@ export function selectedUserData(selectedUserData) {
     }
 }
 
+
+
+
+
+export function selectedAdminData(selectedAdminData) {
+
+    return {
+        type: "SELECTED_ADMIN_DATA",
+        payload:selectedAdminData
+    }
+}
+
+export function setAdminsData(adminsData) {
+
+    return {
+        type: "SET_ADMINS_DATA",
+        payload:adminsData
+    }
+}
 export function setUsersData(usersData) {
 
     return {
@@ -229,11 +293,24 @@ export function setUsersData(usersData) {
         payload:usersData
     }
 }
+export function getAdmins() {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+        get(GET_USERS_URL,authToken).then(function (admins) {
+            dispatch(setAdminsData(admins));
+        }, function (error) {
+            if (error.response) {
+                console.log("----error in get admins-------",error)
+            }
+        });
+    }
+}
 export function getUsers() {
     var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
         var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
-        get(GET_USERS_URL,authToken).then(function (users) {
+        get(APP_USERS,authToken).then(function (users) {
             dispatch(setUsersData(users));
         }, function (error) {
             if (error.response) {
@@ -282,6 +359,25 @@ export function deleteAdmin(adminId) {
     return  dispatch => {
         return new Promise (function (resolve,reject) {
             _delete(DELETE_USERS_URL+"/"+adminId,authToken).then(function (result) {
+                dispatch(getAdmins());
+                resolve(result)
+            }, function (error) {
+                if (error.response) {
+                    console.log("----error in delete admin-------",error)
+                }
+                reject(error)
+            });
+        })
+
+    }
+}
+
+export function deleteUser(userId) {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+    return  dispatch => {
+        return new Promise (function (resolve,reject) {
+            _delete(APP_USERS+"/"+userId,authToken).then(function (result) {
                 dispatch(getUsers());
                 resolve(result)
             }, function (error) {
@@ -418,12 +514,27 @@ export function addStandard(standard) {
     }
 }
 
-export function getUserDetails(email) {
+export function getUserDetails(userId) {
     var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
         var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
-        get(GET_USER_DETAILS_URL+"/"+email,authToken).then(function (user) {
+        get(APP_USERS+"/"+userId,authToken).then(function (user) {
             dispatch(selectedUserData(user));
+        }, function (error) {
+            if (error.response) {
+                console.log("----error in get User Details-------",error)
+            }
+        });
+    }
+}
+
+
+export function getAdminDetails(email) {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+        get(GET_USER_DETAILS_URL+"/"+email,authToken).then(function (admin) {
+            dispatch(selectedAdminData(admin));
         }, function (error) {
             if (error.response) {
                 console.log("----error in get videos-------",error)

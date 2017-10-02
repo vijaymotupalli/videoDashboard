@@ -42,8 +42,11 @@ class Menu extends React.Component {
                             <span className="glyphicon glyphicon-file"/> Data </NavLink>
                         }
 
-                            {this.state.superAdmin && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
-                                <span className="glyphicon glyphicon-stats" /> Users </NavLink>}
+                            {this.state.superAdmin && <NavLink to={match.url + '/admins'} activeClassName="active"  exact>
+                                <span className="glyphicon glyphicon-stats" /> Admins </NavLink>}
+
+                        {this.state.superAdmin && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
+                            <span className="glyphicon glyphicon-stats" /> Users </NavLink>}
 
                         <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
                             className="glyphicon glyphicon-facetime-video"/> Videos </NavLink>

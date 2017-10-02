@@ -1,5 +1,5 @@
 import React from "react";
-import {editUser,setUserError} from "../actions/index";
+import {editAdmin,setAdminError} from "../actions/index";
 import {connect} from "react-redux";
 import './styles.css';
 
@@ -8,35 +8,31 @@ class EditUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            _id:props.selectedUser._id,
-            email: props.selectedUser.email,
-            name: props.selectedUser.name,
-            username: props.selectedUser.userName,
-            phone: props.selectedUser.phone,
+            email: props.selectedAdmin.email,
+            name: props.selectedAdmin.name,
+            phone: props.selectedAdmin.phone,
             error: "",
-            address:props.selectedUser.address,
+            address:props.selectedAdmin.address,
         };
         this.onSubmit = this.onSubmit.bind(this)
     }
     componentWillReceiveProps(nextProps){
         this.setState ({
-            _id: nextProps.selectedUser._id,
-            email: nextProps.selectedUser.email,
-            name: nextProps.selectedUser.name,
-            username: nextProps.selectedUser.username,
-            phone: nextProps.selectedUser.phone,
-            address:nextProps.selectedUser.address,
+            email: nextProps.selectedAdmin.email,
+            name: nextProps.selectedAdmin.name,
+            phone: nextProps.selectedAdmin.phone,
+            address:nextProps.selectedAdmin.address,
         });
     }
     onSubmit(e) {
         e.preventDefault();
         this.setState({error:""})
-        this.props.setUserError("");
-        const {email, name, phone ,address,_id } = this.state;
+        this.props.setAdminError("");
+        const {email, name, phone ,address } = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-            this.props.editUser(_id,{name: name,address:address}).then((result,err)=> {
+            this.props.editAdmin(email,{name: name, phone: phone,address:address}).then((result,err)=> {
                 document.getElementById("close").click()
             })
         }
@@ -57,33 +53,22 @@ class EditUser extends React.Component {
                                         <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-3">
-                                                    <label className="colorGray">Name</label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <input type="text"  className="form-control" placeholder="Type Name" name="name"
-                                                           onChange={e => this.setState({name: e.target.value})} value={this.state.name} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">User Name</label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <input type="text"  className="form-control"  name="username"
-                                                         disabled  onChange={e => this.setState({username: e.target.value})} value={this.state.username} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
                                                     <label className="colorGray">Email</label>
                                                 </div>
                                                 <div className="col-md-9">
                                                     <input type="email"  className="form-control" placeholder="Type Email ID" name="email"
                                                            value={this.state.email} disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">Name</label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <input type="text"  className="form-control" placeholder="Type Name" name="name"
+                                                           onChange={e => this.setState({name: e.target.value})} value={this.state.name} />
                                                 </div>
                                             </div>
                                         </div>
@@ -95,7 +80,7 @@ class EditUser extends React.Component {
                                                 </div>
                                                 <div className="col-md-9">
                                                     <input type="text" className="form-control" value={this.state.phone}
-                                                           onChange={(e)=>this.setState({phone: e.target.value})} disabled/>
+                                                           onChange={(e)=>this.setState({phone: e.target.value})} />
                                                 </div>
                                             </div>
                                         </div>
@@ -114,7 +99,7 @@ class EditUser extends React.Component {
                                     <div className="text-center">
                                         <label className="errorcolor">
                                             { this.state.error && <div>{this.state.error}</div>  }
-                                            { this.props.userError && <div>{ this.props.userError}</div>}
+                                            { this.props.adminError && <div>{ this.props.adminError}</div>}
                                         </label>
                                     </div>
                                 </div>
@@ -142,15 +127,15 @@ class EditUser extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        userError: state.User.error,
-        selectedUser: state.User.selectedUser,
+        adminError: state.User.error,
+        selectedAdmin: state.User.selectedAdmin,
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        editUser: (userId,user) => dispatch(editUser(userId,user)),
-        setUserError: (error) => dispatch(setUserError(error)),
+        editAdmin: (userId,admin) => dispatch(editAdmin(userId,admin)),
+        setAdminError: (error) => dispatch(setAdminError(error)),
 
     };
 }

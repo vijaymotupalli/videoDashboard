@@ -6,7 +6,9 @@ import Newmenu from './Newmenu'
 import Videos from './Videos'
 import Myprofile from './Myprofile'
 import Data from './Data'
+import Admins from './Admins'
 import Users from './Users'
+import AdminDetails from './AdminDetails'
 import UserDetails from './UserDetails'
 import { BrowserRouter,Route ,Redirect} from 'react-router-dom'
 import './styles.css'
@@ -29,7 +31,9 @@ class Admin extends React.Component {
                 <div  id="toggleMenu">
                     <Route exact  path= {match.url+'/videos' } component={Videos} />
                     <Route exact  path= {match.url+'/myprofile' } component={Myprofile} />
+                    <Route exact  path= {match.url+'/admins' } component={Admins} />
                     <Route exact  path= {match.url+'/users' } component={Users} />
+                    <Route exact  path={match.url+'/admins/:adminId'} component={AdminDetails} />
                     <Route exact  path={match.url+'/users/:userId'} component={UserDetails} />
                     <Route exact  path= {match.url+'/data' } component={Data} />
                 </div>
