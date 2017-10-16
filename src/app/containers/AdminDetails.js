@@ -20,6 +20,16 @@ class UserDetails extends React.Component {
                 <div  className="row">
                     <div  className="col-md-12">
                         <div  className="cardWidget">
+                            <div className="cardTop">
+                                <div className="row">
+                                    <div className="col-md-12 text-center">
+                                        <figure>
+                                            <img src={this.props.selectedAdmin.schoolLogoUrl}  />
+                                        </figure>
+                                        <figcaption>School Logo</figcaption>
+                                    </div>
+                                </div>
+                            </div>
                             <div  className="cardBottom">
                                 <div  className="row">
                                     <div  className="col-md-6">

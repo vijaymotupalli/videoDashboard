@@ -1,5 +1,5 @@
 import React from "react";
-import {addAdmin,setAdminError,getSchools} from "../actions/index";
+import {addAdmin,setAdminError,getSchools,uploadVideo, setProgress,} from "../actions/index";
 import {connect} from "react-redux";
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './styles.css';
@@ -15,24 +15,55 @@ class Adduser extends React.Component {
             phone:"",
             address:"",
             school:"",
-            error: ""
+            error: "",
+            url: "",
+            uri: "",
         };
 
         this.onSubmit = this.onSubmit.bind(this)
+        this._handleSubmit = this._handleSubmit.bind(this)
+        this._handleImageChange = this._handleImageChange.bind(this)
+    }
+
+    _handleSubmit(e) {
+        e.preventDefault();
+        const {uri} = this.state;
+        this.props.uploadVideo(uri).then((result, err)=> {
+
+            var logoUrl = JSON.parse(result)
+
+            this.setState({url: logoUrl[0]})
+        })
+
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+        this.props.setProgress(0);
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        reader.onloadend = () => {
+            this.setState({
+                uri: file
+            });
+        }
+        reader.readAsDataURL(file)
     }
 
     onSubmit(e) {
         e.preventDefault();
         this.setState({error:""})
         this.props.setAdminError("");
-        const {email, name,password,phone,address,school} = this.state;
+        const {email, name,password,phone,address,school,url} = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-           this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address}).then((result,err)=> {
+           this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address,schoolLogoUrl:url}).then((result,err)=> {
                if(!err){
+                   document.getElementById("rad1").checked = false;
+                   document.getElementById("rad2").checked = false;
                    this.setState({
-                       email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false
+                       email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false,url:"",uri:""
                    })
                }
             })
@@ -122,13 +153,13 @@ class Adduser extends React.Component {
 
                                                         <div className="radio">
                                                             <label>
-                                                                <input type="radio" value="school" name="isSchool" onClick={(e)=>this.setState({isSchool:true})} />
+                                                                <input type="radio" value="school" name="isSchool" id="rad1" onClick={(e)=>this.setState({isSchool:true})} />
                                                                 School
                                                             </label>
                                                         </div>
                                                         <div className="radio">
                                                             <label>
-                                                                <input type="radio" value="admin" name="isSchool" onClick={(e)=>this.setState({isSchool:false})} />
+                                                                <input type="radio" value="admin" name="isSchool" id="rad2" onClick={(e)=>this.setState({isSchool:false})} />
                                                                 User
                                                             </label>
                                                         </div>
@@ -136,6 +167,7 @@ class Adduser extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
+
                                         {this.state.isSchool && <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-3">
@@ -149,6 +181,48 @@ class Adduser extends React.Component {
                                                 </div>
                                             </div>
                                         </div>}
+
+                                        {this.state.isSchool && <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">Upload Logo<span className="required">*</span></label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <input type="file" id="test"  onChange={(e)=> {
+                                                        this._handleImageChange(e)
+                                                    }}/>
+                                                    <span><button className="submitButton"
+                                                                  type="submit"
+                                                                  onClick={(e)=>this._handleSubmit(e)}
+                                                                  disabled={!this.state.uri}>Upload</button></span>
+                                                </div>
+                                            </div>
+                                        </div> }
+                                        {this.state.isSchool && this.props.progress ? <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">Logo Url</label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <input className="form-control" rows="5"
+                                                           id="comment"
+                                                           value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>
+                                                </div>
+                                            </div>
+                                        </div> :""}
+                                        {this.state.isSchool && this.props.progress ? <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-12">
+                                                    <div className="progress">
+                                                        <div className="progress-bar" role="progressbar"
+                                                             style={{width: this.props.progress + "%"}}>
+                                                            {this.props.progress + "%"}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> : ""}
+
                                     </form>
                                     <div className="text-center">
                                         <label className="errorcolor">
@@ -183,11 +257,15 @@ const mapStateToProps = (state) => {
         adminError: state.User.error,
         schools:state.Data.schools,
         adminDataClear:state.User.adminDataClear,
+        progress: state.Videos.progress
+
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        uploadVideo: (file) => dispatch(uploadVideo(file)),
+        setProgress: (progress) => dispatch(setProgress(progress)),
         getSchools: ()=> dispatch(getSchools()),
         addAdmin: (admin) => dispatch(addAdmin(admin)),
         setAdminError: (error) => dispatch(setAdminError(error)),

@@ -13,6 +13,7 @@ class EditUser extends React.Component {
             phone: props.selectedAdmin.phone,
             error: "",
             address:props.selectedAdmin.address,
+            schoolLogoUrl:props.selectedAdmin.schoolLogoUrl ? props.selectedAdmin.schoolLogoUrl :"",
         };
         this.onSubmit = this.onSubmit.bind(this)
     }
@@ -22,6 +23,8 @@ class EditUser extends React.Component {
             name: nextProps.selectedAdmin.name,
             phone: nextProps.selectedAdmin.phone,
             address:nextProps.selectedAdmin.address,
+            schoolLogoUrl:nextProps.selectedAdmin.schoolLogoUrl ? nextProps.selectedAdmin.schoolLogoUrl :"",
+
         });
     }
     onSubmit(e) {
