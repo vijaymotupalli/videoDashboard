@@ -1,5 +1,5 @@
 import React from "react";
-import {editAdmin,setAdminError} from "../actions/index";
+import {editAdmin,setAdminError,uploadVideo, setProgress} from "../actions/index";
 import {connect} from "react-redux";
 import './styles.css';
 
@@ -12,7 +12,10 @@ class EditUser extends React.Component {
             name: props.selectedAdmin.name,
             phone: props.selectedAdmin.phone,
             error: "",
+            uri:"",
             address:props.selectedAdmin.address,
+            school:props.selectedAdmin.school,
+            url:"",
             schoolLogoUrl:props.selectedAdmin.schoolLogoUrl ? props.selectedAdmin.schoolLogoUrl :"",
         };
         this.onSubmit = this.onSubmit.bind(this)
@@ -23,19 +26,45 @@ class EditUser extends React.Component {
             name: nextProps.selectedAdmin.name,
             phone: nextProps.selectedAdmin.phone,
             address:nextProps.selectedAdmin.address,
+            school:nextProps.selectedAdmin.school,
             schoolLogoUrl:nextProps.selectedAdmin.schoolLogoUrl ? nextProps.selectedAdmin.schoolLogoUrl :"",
 
         });
+    }
+
+    _handleSubmit(e) {
+        e.preventDefault();
+        const {uri} = this.state;
+        this.props.uploadVideo(uri).then((result, err)=> {
+
+            var logoUrl = JSON.parse(result)
+
+            this.setState({url: logoUrl[0],schoolLogoUrl:logoUrl[0]})
+        })
+
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+        this.props.setProgress(0);
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        reader.onloadend = () => {
+            this.setState({
+                uri: file,
+            });
+        }
+        reader.readAsDataURL(file)
     }
     onSubmit(e) {
         e.preventDefault();
         this.setState({error:""})
         this.props.setAdminError("");
-        const {email, name, phone ,address } = this.state;
+        const {email, name, phone ,address,schoolLogoUrl } = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-            this.props.editAdmin(email,{name: name, phone: phone,address:address}).then((result,err)=> {
+            this.props.editAdmin(email,{name: name, phone: phone,address:address,schoolLogoUrl:schoolLogoUrl}).then((result,err)=> {
                 document.getElementById("close").click()
             })
         }
@@ -53,6 +82,56 @@ class EditUser extends React.Component {
                                 </div>
                                 <div className="modal-body">
                                     <form>
+                                        {this.state.school && <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">School Logo<span className="required">*</span></label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <img src={this.state.schoolLogoUrl} width="30%"  />
+                                                </div>
+                                            </div>
+                                        </div> }
+                                        {this.state.school && <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">Upload Logo<span className="required">*</span></label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <input type="file" id="test"  onChange={(e)=> {
+                                                        this._handleImageChange(e)
+                                                    }}/>
+                                                    <span><button className="submitButton"
+                                                                  type="submit"
+                                                                  onClick={(e)=>this._handleSubmit(e)}
+                                                                  disabled={!this.state.uri}>Upload</button></span>
+                                                </div>
+                                            </div>
+                                        </div> }    {this.state.school && this.props.progress ? <div className="form-group modalFields">
+                                        <div className="row mt30">
+                                            <div className="col-md-3">
+                                                <label className="colorGray">Logo Url</label>
+                                            </div>
+                                            <div className="col-md-9">
+                                                <input className="form-control" rows="5"
+                                                       id="comment"
+                                                       value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>
+                                            </div>
+                                        </div>
+                                    </div> :""}
+                                        {this.state.isSchool && this.props.progress ? <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-12">
+                                                    <div className="progress">
+                                                        <div className="progress-bar" role="progressbar"
+                                                             style={{width: this.props.progress + "%"}}>
+                                                            {this.props.progress + "%"}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> : ""}
+
                                         <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-3">
@@ -132,11 +211,15 @@ const mapStateToProps = (state) => {
     return {
         adminError: state.User.error,
         selectedAdmin: state.User.selectedAdmin,
+        progress: state.Videos.progress
+
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        uploadVideo: (file) => dispatch(uploadVideo(file)),
+        setProgress: (progress) => dispatch(setProgress(progress)),
         editAdmin: (userId,admin) => dispatch(editAdmin(userId,admin)),
         setAdminError: (error) => dispatch(setAdminError(error)),
 

@@ -17,38 +17,39 @@ class UserDetails extends React.Component {
         return (
             <div className="container-fluid">
                 <h3  className="title">Admin Details</h3>
-                <div  className="row">
-                    <div  className="col-md-12">
-                        <div  className="cardWidget">
-                            <div className="cardTop">
-                                <div className="row">
-                                    <div className="col-md-12 text-center">
-                                        <figure>
-                                            <img src={this.props.selectedAdmin.schoolLogoUrl}  />
-                                        </figure>
-                                        <figcaption>School Logo</figcaption>
+                    <div  className="row">
+                        <div  className="col-md-12">
+                            <div  className="cardWidget">
+                                {this.props.selectedAdmin.school && <div className="ribbon ribbon-top-right"><span>school</span></div>}
+                                {this.props.selectedAdmin.schoolLogoUrl && <div className="cardTop">
+                                    <div className="row">
+                                        <div className="col-md-12 text-center">
+                                            <figure>
+                                                <img src={this.props.selectedAdmin.schoolLogoUrl}  />
+                                            </figure>
+                                            <figcaption>School Logo</figcaption>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div  className="cardBottom">
-                                <div  className="row">
-                                    <div  className="col-md-6">
-                                        <p ><strong >Email</strong> <span >{this.props.selectedAdmin.email}</span></p>
-                                        <p ><strong >Name</strong> <span >{this.props.selectedAdmin.name}</span></p>
-                                        <p ><strong >Address</strong> <span >{this.props.selectedAdmin.address}</span></p>
-                                    </div>
-                                    <div  className="col-md-4 text-center">
-                                        <p ><strong >Date of Joining</strong> <span >{moment(this.props.selectedAdmin.createdAt).format('L')}</span></p>
-                                        <p ><strong >Phone </strong> <span >{this.props.selectedAdmin.phone} </span></p>
-                                    </div>
-                                    <div  className="col-md-2 text-right">
-                                        <button   className="btn blackButton" data-toggle="modal"
-                                                data-target="#myUserEditModal">Edit</button>
+                                </div>}
+                                <div  className="cardBottom">
+                                    <div  className="row">
+                                        <div  className="col-md-6">
+                                            <p ><strong >Email</strong> <span >{this.props.selectedAdmin.email}</span></p>
+                                            <p ><strong >Name</strong> <span >{this.props.selectedAdmin.name}</span></p>
+                                            <p ><strong >Address</strong> <span >{this.props.selectedAdmin.address}</span></p>
+                                        </div>
+                                        <div  className="col-md-4 text-center">
+                                            <p ><strong >Date of Joining</strong> <span >{moment(this.props.selectedAdmin.createdAt).format('L')}</span></p>
+                                            <p ><strong >Phone </strong> <span >{this.props.selectedAdmin.phone} </span></p>
+                                        </div>
+                                        <div  className="col-md-2 text-right">
+                                            <button   className="btn blackButton" data-toggle="modal"
+                                                      data-target="#myUserEditModal">Edit</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
                 {this.props.selectedAdmin  && <EditAdmin />}
             </div>
