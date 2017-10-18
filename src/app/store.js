@@ -18,6 +18,6 @@ export default createStore(
     }),
     {},
     composeEnhancers(
-        applyMiddleware(thunk,logger()))
+        applyMiddleware(thunk))
 
 );

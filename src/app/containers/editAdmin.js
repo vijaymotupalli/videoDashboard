@@ -16,7 +16,7 @@ class EditUser extends React.Component {
             address:props.selectedAdmin.address,
             school:props.selectedAdmin.school,
             url:"",
-            schoolLogoUrl:props.selectedAdmin.schoolLogoUrl ? props.selectedAdmin.schoolLogoUrl :"",
+            schoolLogoUrl:props.selectedAdmin.schoolLogoUrl ? props.selectedAdmin.schoolLogoUrl :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png",
         };
         this.onSubmit = this.onSubmit.bind(this)
     }
@@ -27,7 +27,7 @@ class EditUser extends React.Component {
             phone: nextProps.selectedAdmin.phone,
             address:nextProps.selectedAdmin.address,
             school:nextProps.selectedAdmin.school,
-            schoolLogoUrl:nextProps.selectedAdmin.schoolLogoUrl ? nextProps.selectedAdmin.schoolLogoUrl :"",
+            schoolLogoUrl:nextProps.selectedAdmin.schoolLogoUrl ? nextProps.selectedAdmin.schoolLogoUrl :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png",
 
         });
     }
@@ -65,11 +65,13 @@ class EditUser extends React.Component {
             error: "Email Not Valid"
         })}else {
             this.props.editAdmin(email,{name: name, phone: phone,address:address,schoolLogoUrl:schoolLogoUrl}).then((result,err)=> {
+                this.props.setProgress(0);
                 document.getElementById("close").click()
             })
         }
     }
     render() {
+        console.log("------state-----",this.state,this.props);
         return (
             <div>
                 <div className="container" >
@@ -119,7 +121,7 @@ class EditUser extends React.Component {
                                             </div>
                                         </div>
                                     </div> :""}
-                                        {this.state.isSchool && this.props.progress ? <div className="form-group modalFields">
+                                        {this.state.school && this.props.progress ? <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-12">
                                                     <div className="progress">

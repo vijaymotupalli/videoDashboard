@@ -21,11 +21,11 @@ class UserDetails extends React.Component {
                         <div  className="col-md-12">
                             <div  className="cardWidget">
                                 {this.props.selectedAdmin.school && <div className="ribbon ribbon-top-right"><span>school</span></div>}
-                                {this.props.selectedAdmin.schoolLogoUrl && <div className="cardTop">
+                                {this.props.selectedAdmin.school && <div className="cardTop">
                                     <div className="row">
                                         <div className="col-md-12 text-center">
                                             <figure>
-                                                <img src={this.props.selectedAdmin.schoolLogoUrl}  />
+                                                <img src={this.props.selectedAdmin.schoolLogoUrl || "https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png"}  />
                                             </figure>
                                             <figcaption>School Logo</figcaption>
                                         </div>

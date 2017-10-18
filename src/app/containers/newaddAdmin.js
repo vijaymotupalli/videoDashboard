@@ -60,6 +60,7 @@ class Adduser extends React.Component {
         })}else {
            this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address,schoolLogoUrl:url}).then((result,err)=> {
                if(!err){
+                   this.props.setProgress(0);
                    document.getElementById("rad1").checked = false;
                    document.getElementById("rad2").checked = false;
                    this.setState({
