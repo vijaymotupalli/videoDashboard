@@ -1,6 +1,6 @@
 var axios = require('axios');
-axios.defaults.baseURL = 'http://13.126.220.44:9000';
-//axios.defaults.baseURL = 'http://localhost:9001';
+//axios.defaults.baseURL = 'http://13.126.220.44:9000';
+axios.defaults.baseURL = 'http://localhost:9000';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Authorization'] = ""
 
