@@ -1,7 +1,7 @@
 import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_VIDEOS,SET_MY_PROFILE,SET_PROGRESS,
-    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS} from './types'
+    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS} from './types'
 import {post,get,put,_delete} from "../service/api";
-import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,
+import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,GET_DEMO_VIDEOS_URL,
 SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER,APP_USERS} from "../service/apiurls"
 import {LOGIN_TOKEN_TYPE,ADMIN_TOKEN_TYPE} from "../service/tokenTypes"
 
@@ -41,12 +41,19 @@ export function setSelectedVideo(video) {
         payload:video
     }
 }
+export function setDemoVideos(videos) {
+    return {
+        type: SET_DEMO_VIDEOS,
+        payload:videos
+    }
+}
 export function setVideos(videos) {
     return {
         type: SET_VIDEOS,
         payload:videos
     }
-}export function setSchools(schools) {
+}
+export function setSchools(schools) {
     return {
         type: SET_SCHOOLS,
         payload:schools
@@ -108,6 +115,7 @@ export function postVideo(video) {
             var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
             post(POST_VIDEO_URL,authToken,video).then(function (video) {
                 dispatch(getVideos());
+                dispatch(getDemoVideos());
                 resolve(video)
             }, function (error) {
                 if (error.response) {
@@ -585,6 +593,19 @@ export function getVideos() {
         });
     }
 }
+export function getDemoVideos() {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+        get(GET_DEMO_VIDEOS_URL,authToken).then(function (videos) {
+            dispatch(setDemoVideos(videos));
+        }, function (error) {
+            if (error.response) {
+               console.log("----error in get videos-------",error)
+            }
+        });
+    }
+}
 export function getSchools() {
     return  dispatch => {
         get(SCHOOLS).then(function (schools) {
@@ -687,6 +708,7 @@ export function editVideo(video) {
             var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
             put(EDIT_VIDEO_URL+"/"+video.videoId,authToken,video).then(function (video) {
                 dispatch(getVideos());
+                dispatch(getDemoVideos());
                 resolve()
             },function (error) {
                 if (error.response) {

@@ -71,7 +71,6 @@ class EditUser extends React.Component {
         }
     }
     render() {
-        console.log("------state-----",this.state,this.props);
         return (
             <div>
                 <div className="container" >

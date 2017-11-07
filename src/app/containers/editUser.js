@@ -13,8 +13,8 @@ class EditUser extends React.Component {
             name: props.selectedUser.name,
             username: props.selectedUser.userName,
             phone: props.selectedUser.phone,
-            error: "",
-            address:props.selectedUser.address,
+            error: ""
+
         };
         this.onSubmit = this.onSubmit.bind(this)
     }
@@ -24,8 +24,8 @@ class EditUser extends React.Component {
             email: nextProps.selectedUser.email,
             name: nextProps.selectedUser.name,
             username: nextProps.selectedUser.username,
-            phone: nextProps.selectedUser.phone,
-            address:nextProps.selectedUser.address,
+            phone: nextProps.selectedUser.phone
+
         });
     }
     onSubmit(e) {
@@ -36,7 +36,7 @@ class EditUser extends React.Component {
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-            this.props.editUser(_id,{name: name,address:address}).then((result,err)=> {
+            this.props.editUser(_id,{name: name,address:address,email:email}).then((result,err)=> {
                 document.getElementById("close").click()
             })
         }
@@ -61,7 +61,7 @@ class EditUser extends React.Component {
                                                 </div>
                                                 <div className="col-md-9">
                                                     <input type="text"  className="form-control" placeholder="Type Name" name="name"
-                                                           onChange={e => this.setState({name: e.target.value})} value={this.state.name} />
+                                                           onChange={e => this.setState({name: e.target.value})} value={this.state.name ? this.state.name :""} />
                                                 </div>
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@ class EditUser extends React.Component {
                                                 </div>
                                                 <div className="col-md-9">
                                                     <input type="text"  className="form-control"  name="username"
-                                                         disabled  onChange={e => this.setState({username: e.target.value})} value={this.state.username} />
+                                                         disabled  value={this.state.username ? this.state.username :""} />
                                                 </div>
                                             </div>
                                         </div>
@@ -83,7 +83,7 @@ class EditUser extends React.Component {
                                                 </div>
                                                 <div className="col-md-9">
                                                     <input type="email"  className="form-control" placeholder="Type Email ID" name="email"
-                                                           value={this.state.email} disabled/>
+                                                           value={this.state.email ? this.state.email :""} onChange={e => this.setState({email: e.target.value})} />
                                                 </div>
                                             </div>
                                         </div>
@@ -94,19 +94,8 @@ class EditUser extends React.Component {
                                                     <label className="colorGray">Phone</label>
                                                 </div>
                                                 <div className="col-md-9">
-                                                    <input type="text" className="form-control" value={this.state.phone}
-                                                           onChange={(e)=>this.setState({phone: e.target.value})} disabled/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">Address</label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <input type="text" className="form-control" value={this.state.address}
-                                                           onChange={(e)=>this.setState({address: e.target.value})} />
+                                                    <input type="text" className="form-control" value={this.state.phone ? this.state.phone :""}
+                                                            disabled/>
                                                 </div>
                                             </div>
                                         </div>

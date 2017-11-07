@@ -34,7 +34,6 @@ class Addvideo extends React.Component {
                 subject: subject,
                 standard: standard
             }).then((result, err)=> {
-                console.log("---errror----",err)
                 this.props.setProgress(0);
                 this.props.setVideoError("");
                 document.getElementById("test").value = ""

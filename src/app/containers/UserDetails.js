@@ -29,7 +29,6 @@ class UserDetails extends React.Component {
                                     </div>
                                     <div  className="col-md-4 text-center">
                                         <p ><strong >Date of Joining</strong> <span >{moment(this.props.selectedUser.createdAt).format('LL')}</span></p>
-                                        <p ><strong >Address</strong> <span >{this.props.selectedUser.address}</span></p>
                                         <p ><strong >Phone </strong> <span >{this.props.selectedUser.phone} </span></p>
                                     </div>
                                     <div  className="col-md-2 text-right">

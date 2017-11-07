@@ -1,21 +1,20 @@
 import React from "react"
 import {Route, Link, Switch} from 'react-router-dom';
-import {setSelectedVideo, getVideos,deleteVideo} from "../actions/index";
+import {setSelectedVideo, getDemoVideos,deleteVideo} from "../actions/index";
 import './styles.css';
 import Addvideo from './AddVideo'
 import EditVideo from './EditVideo'
 import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
-import ApplyFilter from './ApplyFilter'
 import 'style-loader!react-confirm-alert/src/react-confirm-alert.css'
 import {connect} from "react-redux";
 
 import Loadable from 'react-loading-overlay'
 import OverlayLoader from 'react-overlay-loading/lib/OverlayLoader'
 
-class Videos extends React.Component {
+class DemoVideos extends React.Component {
     constructor(props) {
         super(props)
-        this.props.getVideos()
+        this.props.getDemoVideos()
         this.state = {
             superAdmin :false
         }
@@ -48,17 +47,14 @@ class Videos extends React.Component {
                    <Addvideo/>
                    <EditVideo/>
                    <div className="row" id="title">
-                       <div className="col-sm-10" id="userslist">All Videos</div>
-                       {!this.state.superAdmin && <div className="col-sm-2" >
+                       <div className="col-sm-10" id="userslist">Demo Videos</div>
+                       {this.state.superAdmin && <div className="col-sm-2" >
                            <button type="button" className="btn btn-info btn-sm" data-toggle="modal"
                                    data-target="#addvideo">
                                <span className="glyphicon glyphicon-plus"/> Upload Video
                            </button>
                        </div>}
 
-                   </div>
-                   <div className="filter">
-                       <ApplyFilter/>
                    </div>
                    <OverlayLoader
                        color={'red'} // default is white
@@ -68,7 +64,7 @@ class Videos extends React.Component {
                        backgroundColor={'white'} // default is black
                        opacity="0.4" // default is .9
                    >
-                       {this.props.videos.length > 0 ? this.props.videos.map((video)=> {
+                       {this.props.demoVideos.length > 0 ? this.props.demoVideos.map((video)=> {
                            return (
                                <div className="container, col-sm-4" key={video._id} style={{textAlign:"left"}}>
                                    <div  className="panel panel-default productWidget">
@@ -109,7 +105,7 @@ class Videos extends React.Component {
                                            <div className="row">
                                                <div className="col-sm-8">
                                                    <p ><strong>Standard : </strong><strong><span style={{marginLeft:"auto"}}
-                                                       className="label label-success">{(video.standard && video.standard.name) ? (video.standard.name) :"No Standard"}</span></strong> </p>
+                                                                                                 className="label label-success">{(video.standard && video.standard.name) ? (video.standard.name) :"No Standard"}</span></strong> </p>
                                                </div>
                                                <div className="col-sm-4">
                                                    <button type="button" className="btn btn-default btn-sm" onClick={()=> {
@@ -125,7 +121,7 @@ class Videos extends React.Component {
 
 
                            )
-                       }) : <h2 className="notFound">"No Videos Found"</h2> }
+                       }) : <h2 className="notFound">"Demo Videos Not Found"</h2> }
                    </OverlayLoader>
                </div>
         )
@@ -137,7 +133,7 @@ const mapStateToProps = (state) => {
 
 
     return {
-        videos: state.Videos.videos,
+        demoVideos: state.Videos.demoVideos,
         loader: state.Videos.loader,
         selectedVideo: state.Videos.selectedVideo
     };
@@ -148,13 +144,13 @@ const mapDispatchToProps = (dispatch)=> {
 
     return {
         setSelectedVideo: (video) => dispatch(setSelectedVideo(video)),
-        getVideos: () => dispatch(getVideos()),
+        getDemoVideos: () => dispatch(getDemoVideos()),
         deleteVideo: (video) => dispatch(deleteVideo(video)),
 
     };
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Videos);
+export default connect(mapStateToProps, mapDispatchToProps)(DemoVideos);
 
 

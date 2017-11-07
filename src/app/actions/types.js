@@ -3,6 +3,7 @@ export const SET_LOGIN_SUCCESS = 'SET_LOGIN_SUCCESS';
 export const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
 export const SET_VIDEO_ERROR = 'SET_VIDEO_ERROR';
 export const SET_VIDEOS = 'SET_VIDEOS';
+export const SET_DEMO_VIDEOS = 'SET_DEMO_VIDEOS';
 export const SELECTED_VIDEO = 'SELECTED_VIDEO';
 export const GET_MY_PROFILE = 'GET_MY_PROFILE';
 export const SET_MY_PROFILE = 'SET_MY_PROFILE';

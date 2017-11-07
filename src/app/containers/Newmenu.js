@@ -51,6 +51,10 @@ class Menu extends React.Component {
                         <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
                             className="glyphicon glyphicon-facetime-video"/> Videos </NavLink>
 
+                        { this.state.superAdmin && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
+                            <span className="glyphicon glyphicon-file"/> Demo Videos </NavLink>
+                        }
+
                         <NavLink to="/" activeClassName="active" onClick={this.onSignout} exact><span
                             className="glyphicon glyphicon-off"/> Signout </NavLink>
                     </div>
