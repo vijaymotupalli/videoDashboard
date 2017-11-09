@@ -23,7 +23,7 @@ class EditUser extends React.Component {
             _id: nextProps.selectedUser._id,
             email: nextProps.selectedUser.email,
             name: nextProps.selectedUser.name,
-            username: nextProps.selectedUser.username,
+            username: nextProps.selectedUser.userName,
             phone: nextProps.selectedUser.phone
 
         });

@@ -3,8 +3,8 @@ export const GET_VIDEOS_URL = 'api/videos';
 export const GET_DEMO_VIDEOS_URL = 'api/demovideos';
 export const APPLY_FILTER = 'api/videos/applyfilter';
 export const GET_MY_PROFILE_URL = 'api/myprofile';
-export const UPLOAD_VIDEO_URL = 'http://13.126.220.44:9000/api/uploadvideo';
-export const UPLOAD_LOGO_URL = 'http://13.126.220.44:9000/api/uploadlogo';
+export const UPLOAD_VIDEO_URL = 'http://52.66.111.162:9000/api/uploadvideo';
+export const UPLOAD_LOGO_URL = 'http://52.66.111.162:9000/api/uploadlogo';
 export const POST_VIDEO_URL = 'api/videos';
 export const EDIT_VIDEO_URL = 'api/videos';
 export const DELETE_VIDEO_URL = 'api/videos';
@@ -23,3 +23,9 @@ export const POST_USERS_URL = 'api/users'
 export const DELETE_USERS_URL = 'api/users'
 export const GET_USER_ROLES = '/api/users/roles'
 export const GET_USER_DETAILS_URL = 'api/users'
+
+
+export const CODES = 'api/codes'
+
+
+

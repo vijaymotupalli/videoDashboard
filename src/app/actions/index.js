@@ -1,8 +1,8 @@
 import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_VIDEOS,SET_MY_PROFILE,SET_PROGRESS,
-    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS} from './types'
+    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS,SET_CODES} from './types'
 import {post,get,put,_delete} from "../service/api";
 import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,GET_DEMO_VIDEOS_URL,
-SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER,APP_USERS} from "../service/apiurls"
+SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER,APP_USERS,CODES} from "../service/apiurls"
 import {LOGIN_TOKEN_TYPE,ADMIN_TOKEN_TYPE} from "../service/tokenTypes"
 
 import btoa from "btoa"
@@ -67,6 +67,12 @@ export function setSchools(schools) {
     return {
         type: SET_SUBJECTS,
         payload:subjects
+    }
+}
+export function setCodes(codes) {
+    return {
+        type: SET_CODES,
+        payload:codes
     }
 }
 export function setMyProfile(profile) {
@@ -635,6 +641,38 @@ export function getSubjects() {
         }, function (error) {
             if (error.response) {
                console.log("----error in get subjects-------",error)
+            }
+        });
+    }
+}
+
+export function postCodes(codes) {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        return new Promise (function (resolve,reject) {
+            var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+            post(CODES,authToken,codes).then(function (codes) {
+                dispatch(getCodes());
+                resolve(codes)
+            }, function (error) {
+                if (error.response) {
+                    console.log("----error in Post Codes-------",error)
+                }
+                reject(error)
+            });
+        })
+
+    }
+}
+export function getCodes() {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+        get(CODES,authToken).then(function (codes) {
+            dispatch(setCodes(codes));
+        }, function (error) {
+            if (error.response) {
+               console.log("----error in get codes-------",error)
             }
         });
     }

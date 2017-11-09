@@ -11,4 +11,5 @@ export const SET_PROGRESS = 'SET_PROGRESS';
 export const SET_SUBJECTS = 'SET_SUBJECTS';
 export const SET_STANDARDS = 'SET_STANDARDS';
 export const SET_SCHOOLS = 'SET_SCHOOLS';
+export const SET_CODES = 'SET_CODES';
 

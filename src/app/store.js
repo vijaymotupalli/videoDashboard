@@ -5,6 +5,7 @@ import Login from "./reducers/loginReducer";
 import Videos from "./reducers/videoReducer";
 import Admin from "./reducers/adminReducer";
 import Data from "./reducers/dataReducer";
+import Codes from "./reducers/codeReducer";
 import User from "./reducers/userReducer";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -14,7 +15,7 @@ const composeEnhancers = composeWithDevTools({
 
 export default createStore(
     combineReducers({
-        Login,Videos,Admin,Data,User
+        Login,Videos,Admin,Data,User,Codes
     }),
     {},
     composeEnhancers(

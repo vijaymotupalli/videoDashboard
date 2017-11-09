@@ -5,6 +5,7 @@ import Menu from './Menu'
 import Newmenu from './Newmenu'
 import Videos from './Videos'
 import DemoVideos from './DemoVideos'
+import CodeGenerator from './CodeGenerator'
 import Myprofile from './Myprofile'
 import Data from './Data'
 import Admins from './Admins'
@@ -38,6 +39,7 @@ class Admin extends React.Component {
                     <Route exact  path={match.url+'/users/:userId'} component={UserDetails} />
                     <Route exact  path= {match.url+'/data' } component={Data} />
                     <Route exact  path= {match.url+'/demovideos' } component={DemoVideos} />
+                    <Route exact  path= {match.url+'/codes' } component={CodeGenerator} />
                 </div>
             </div>
         );
