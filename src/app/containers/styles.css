@@ -1313,8 +1313,8 @@ a.article, a.article:hover {
     background: #fff;
     padding: 10px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-    margin: 10px 0 0 0;
-    width: 20%;
+    margin: 10px 5px 0 0;
+    width: 19%;
     display: inline-block;
 }
 

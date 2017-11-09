@@ -81,15 +81,15 @@ class CodeGenerator extends React.Component {
                         return (
                             <div className="displayCode" key={code._id}>
                                 <div className="row">
-                                    <div className="col-sm-8 "><strong>Code</strong>{code.code}</div>
+                                    <div className="col-sm-8 "><strong>Code : </strong>{code.code}</div>
                                     <div className="col-sm-4 createdAt">{moment(code.createdAt).format('DD-MM-YYYY')}</div>
                                 </div>
                                 {code.usedBy && code.usedOn && <div className="row">
-                                    <div className="col-sm-8 "><strong>Used By:</strong>{code.usedBy ? code.usedBy :"Not Found"}</div>
-                                    <div className="col-sm-4 createdAt">{code.usedOn ? moment(code.usedOn).format('DD-MM-YYYY') : "Not Found"}</div>
+                                    <div className="col-sm-8 "><strong>Used By : </strong>{code.usedBy ? code.usedBy :"Not Found"}</div>
+                                    <div className="col-sm-4 createdAt">On : {code.usedOn ? moment(code.usedOn).format('DD-MM-YYYY') : "Not Found"}</div>
                                 </div>}
                                 <div className="row">
-                                    <div className="col-sm-8"><strong>Standard:</strong>{code.paidStandards}</div>
+                                    <div className="col-sm-8"><strong>Standard : </strong>{code.paidStandards}</div>
                                 </div>
                             </div>
                         )}) : <h2 className="notFound">"No Codes found"</h2>}
