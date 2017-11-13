@@ -71,12 +71,12 @@ class Adduser extends React.Component {
         }
     }
     render() {
-        var schools = this.props.schools ? this.props.schools : []
-        var listSchools = schools.map(function (school) {
-            return (
-                <option key={school._id} value={school._id}>{school.name}</option>
-            )
-        }, this);
+        // var schools = this.props.schools ? this.props.schools : []
+        // var listSchools = schools.map(function (school) {
+        //     return (
+        //         <option key={school._id} value={school._id}>{school.name}</option>
+        //     )
+        // }, this);
         return (
             <div>
                 <div className="container" >
@@ -145,84 +145,84 @@ class Adduser extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">Type</label>
-                                                </div>
-                                                <div className="col-md-9">
+                                        {/*<div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-3">*/}
+                                                    {/*<label className="colorGray">Type</label>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="col-md-9">*/}
 
-                                                        <div className="radio">
-                                                            <label>
-                                                                <input type="radio" value="school" name="isSchool" id="rad1" onClick={(e)=>this.setState({isSchool:true})} />
-                                                                School
-                                                            </label>
-                                                        </div>
-                                                        <div className="radio">
-                                                            <label>
-                                                                <input type="radio" value="admin" name="isSchool" id="rad2" onClick={(e)=>this.setState({isSchool:false})} />
-                                                                User
-                                                            </label>
-                                                        </div>
+                                                        {/*<div className="radio">*/}
+                                                            {/*<label>*/}
+                                                                {/*<input type="radio" value="school" name="isSchool" id="rad1" onClick={(e)=>this.setState({isSchool:true})} />*/}
+                                                                {/*School*/}
+                                                            {/*</label>*/}
+                                                        {/*</div>*/}
+                                                        {/*<div className="radio">*/}
+                                                            {/*<label>*/}
+                                                                {/*<input type="radio" value="admin" name="isSchool" id="rad2" onClick={(e)=>this.setState({isSchool:false})} />*/}
+                                                                {/*User*/}
+                                                            {/*</label>*/}
+                                                        {/*</div>*/}
 
-                                                </div>
-                                            </div>
-                                        </div>
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div>*/}
 
-                                        {this.state.isSchool && <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">Select School</label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <select className="form-control" id="sel1" onChange={e => this.setState({school: e.target.value})} value={this.state.school}>
-                                                        <option value="" defaultValue disabled>--Select School--</option>
-                                                        {listSchools}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>}
+                                        {/*{this.state.isSchool && <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-3">*/}
+                                                    {/*<label className="colorGray">Select School</label>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="col-md-9">*/}
+                                                    {/*<select className="form-control" id="sel1" onChange={e => this.setState({school: e.target.value})} value={this.state.school}>*/}
+                                                        {/*<option value="" defaultValue disabled>--Select School--</option>*/}
+                                                        {/*{listSchools}*/}
+                                                    {/*</select>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div>}*/}
 
-                                        {this.state.isSchool && <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">Upload Logo<span className="required">*</span></label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <input type="file" id="test"  onChange={(e)=> {
-                                                        this._handleImageChange(e)
-                                                    }}/>
-                                                    <span><button className="submitButton"
-                                                                  type="submit"
-                                                                  onClick={(e)=>this._handleSubmit(e)}
-                                                                  disabled={!this.state.uri}>Upload</button></span>
-                                                </div>
-                                            </div>
-                                        </div> }
-                                        {this.state.isSchool && this.props.progress ? <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">Logo Url</label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <input className="form-control" rows="5"
-                                                           id="comment"
-                                                           value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>
-                                                </div>
-                                            </div>
-                                        </div> :""}
-                                        {this.state.isSchool && this.props.progress ? <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-12">
-                                                    <div className="progress">
-                                                        <div className="progress-bar" role="progressbar"
-                                                             style={{width: this.props.progress + "%"}}>
-                                                            {this.props.progress + "%"}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> : ""}
+                                        {/*{this.state.isSchool && <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-3">*/}
+                                                    {/*<label className="colorGray">Upload Logo<span className="required">*</span></label>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="col-md-9">*/}
+                                                    {/*<input type="file" id="test"  onChange={(e)=> {*/}
+                                                        {/*this._handleImageChange(e)*/}
+                                                    {/*}}/>*/}
+                                                    {/*<span><button className="submitButton"*/}
+                                                                  {/*type="submit"*/}
+                                                                  {/*onClick={(e)=>this._handleSubmit(e)}*/}
+                                                                  {/*disabled={!this.state.uri}>Upload</button></span>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div> }*/}
+                                        {/*{this.state.isSchool && this.props.progress ? <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-3">*/}
+                                                    {/*<label className="colorGray">Logo Url</label>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="col-md-9">*/}
+                                                    {/*<input className="form-control" rows="5"*/}
+                                                           {/*id="comment"*/}
+                                                           {/*value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div> :""}*/}
+                                        {/*{this.state.isSchool && this.props.progress ? <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-12">*/}
+                                                    {/*<div className="progress">*/}
+                                                        {/*<div className="progress-bar" role="progressbar"*/}
+                                                             {/*style={{width: this.props.progress + "%"}}>*/}
+                                                            {/*{this.props.progress + "%"}*/}
+                                                        {/*</div>*/}
+                                                    {/*</div>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div> : ""}*/}
 
                                     </form>
                                     <div className="text-center">

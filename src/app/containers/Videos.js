@@ -87,13 +87,13 @@ class Videos extends React.Component {
                                            </div>
                                        </div>
                                        <div className="panel-body">
-                                           <video  controls className="videoDisplay">
+                                           <video  controls className="videoDisplay" poster={video.videoThumbnail ? video.videoThumbnail : "https://vrscience.s3.ap-south-1.amazonaws.com/no-thumbnail.jpg" }>
                                                <source src={video.url}/>
                                            </video>
                                        </div>
                                        <div className="panel-footer">
-                                           {this.state.superAdmin && <div className="row">
-                                               <div className="col-sm-2">
+                                           {this.state.superAdmin && <div className="row urlDisplay">
+                                               <div className="col-sm-1">
                                                    <p ><strong>Url : </strong></p>
                                                </div>
                                                <div className="col-sm-10">

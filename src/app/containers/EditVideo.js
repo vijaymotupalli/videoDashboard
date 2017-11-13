@@ -1,5 +1,5 @@
 import React from "react";
-import {editVideo,setSelectedVideo,getStandards,getSubjects} from "../actions/index";
+import {editVideo,setSelectedVideo,getStandards,getSubjects,uploadVideo} from "../actions/index";
 import {connect} from "react-redux";
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './styles.css';
@@ -17,9 +17,14 @@ class EditVideo extends React.Component {
             url: this.props.selectedVideo.url ? this.props.selectedVideo.url:"",
             subject: this.props.selectedVideo.subject ? this.props.selectedVideo.subject._id:"",
             standard: this.props.selectedVideo.standard ? this.props.selectedVideo.standard._id:"",
-            videoId:this.props.selectedVideo._id ? this.props.selectedVideo._id:""
+            videoId:this.props.selectedVideo._id ? this.props.selectedVideo._id:"",
+            image:this.props.selectedVideo.videoThumbnail ? this.props.selectedVideo.videoThumbnail:"",
+            file:"",
+            imagePreviewUrl:this.props.selectedVideo.videoThumbnail ? this.props.selectedVideo.videoThumbnail:"",
         };
         this.onSubmit = this.onSubmit.bind(this)
+        this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
     }
     componentWillReceiveProps(nextProps){
         this.setState ({
@@ -28,28 +33,58 @@ class EditVideo extends React.Component {
             url: nextProps.selectedVideo.url ? nextProps.selectedVideo.url:"",
             subject: nextProps.selectedVideo.subject ? nextProps.selectedVideo.subject._id:"",
             standard: nextProps.selectedVideo.standard ? nextProps.selectedVideo.standard._id:"",
-            videoId:nextProps.selectedVideo._id ? nextProps.selectedVideo._id:""
+            videoId:nextProps.selectedVideo._id ? nextProps.selectedVideo._id:"",
+            image:nextProps.selectedVideo.videoThumbnail ? nextProps.selectedVideo.videoThumbnail:"",
+            file:"",
+            imagePreviewUrl:nextProps.selectedVideo.videoThumbnail ? nextProps.selectedVideo.videoThumbnail:"",
         });
 
     }
+    clearImage(){
+        this.setState({imagePreviewUrl:"",image:""});
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
+    }
     onSubmit(e) {
         e.preventDefault();
-        const {title, description, subject, standard,videoId} = this.state;
-        this.props.editVideo({
-            videoId:videoId,
-            title: title,
-            description: description,
-            subject: subject,
-            standard: standard,
-        }).then((result,err)=>{
-            if(!err){
-                document.getElementById("close").click()
-                this.props.setSelectedVideo("");
-            }
+        const {title, description, subject, standard,videoId,file} = this.state;
+
+        this.props.uploadVideo(file).then((result, err)=> {
+            var logoUrl = JSON.parse(result)
+            this.setState({image: logoUrl[0]})
+            this.props.editVideo({
+                videoId:videoId,
+                title: title,
+                description: description,
+                subject: subject,
+                standard: standard,
+                videoThumbnail:this.state.image
+            }).then((result,err)=>{
+                if(!err){
+                    document.getElementById("close").click()
+                    this.props.setSelectedVideo("");
+                }
+            })
         })
+
     }
 
     render() {
+        const {imagePreviewUrl} = this.state
         var subjects = this.props.subjects ? this.props.subjects : []
         var listSubjects = subjects.map((subject)=> {
             return (
@@ -124,6 +159,24 @@ class EditVideo extends React.Component {
                                     <div className="form-group modalFields">
                                         <div className="row mt30">
                                             <div className="col-md-3">
+                                                <label className="colorGray">Video Thumbnail<span className="required">*</span></label>
+                                            </div>
+                                            <div className="col-md-5">
+                                                <div >
+                                                    {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                    {imagePreviewUrl ? <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} /> :"Select Image To Show Preview"}
+                                                </div>
+                                                <br/>
+                                                {!imagePreviewUrl &&  <div className="upload-btn-wrapper">
+                                                    <button className="btn">Select Image</button>
+                                                    <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                </div>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="form-group modalFields">
+                                        <div className="row mt30">
+                                            <div className="col-md-3">
                                                 <label className="colorGray">Video</label>
                                             </div>
                                             <div className="col-md-9">
@@ -167,6 +220,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         editVideo: (video) => dispatch(editVideo(video)),
+        uploadVideo: (file) => dispatch(uploadVideo(file)),
         setSelectedVideo: (video) => dispatch(setSelectedVideo(video)),
         getStandards: ()=> dispatch(getStandards()),
         getSubjects: ()=> dispatch(getSubjects()),

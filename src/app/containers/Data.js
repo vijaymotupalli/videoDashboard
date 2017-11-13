@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import InlineEdit from 'react-edit-inline';
 import './styles.css';
-import {
+import {uploadVideo,
     getSchools, getStandards, getSubjects, addSchool, addSubject, addStandard,
     editSchool, editSubject, editStandard, deleteSubject, deleteStandard, deleteSchool
 } from "../actions/index";
@@ -16,7 +16,9 @@ class Data extends React.Component {
         this.props.getStandards();
         this.props.getSchools();
         this.state = {
-            school: "", subject: "", standard: "", editField: "", disabled: true
+            school: "", subject: "", standard: "", editField: "", disabled: true, image:"",
+            file:"",
+            imagePreviewUrl:""
         }
         this.editSchool = this.editSchool.bind(this);
         this.editSubject = this.editSubject.bind(this);
@@ -24,6 +26,8 @@ class Data extends React.Component {
         this.submitSchool = this.submitSchool.bind(this);
         this.submitStandard = this.submitStandard.bind(this);
         this.submitSubject = this.submitSubject.bind(this);
+        this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
     }
 
     editSchool(school) {
@@ -49,11 +53,27 @@ class Data extends React.Component {
 
     submitSubject(e) {
         e.preventDefault();
-        const {subject} = this.state;
-        this.props.addSubject({name: subject});
-        this.setState({
-            subject: ''
-        });
+        const {subject,file} = this.state;
+        if(!(subject && file )){
+        }else {
+            this.props.uploadVideo(file).then((result, err)=> {
+                var logoUrl = JSON.parse(result)
+                this.setState({image: logoUrl[0]})
+                this.props.addSubject({
+                    name: subject,
+                    image: this.state.image
+                }).then((result, err)=> {
+                    this.setState({
+                        subject: "",
+                        file: "",
+                        imagePreviewUrl:""
+                    })
+                })
+
+            })
+        }
+
+
     }
 
     submitStandard(e) {
@@ -65,147 +85,417 @@ class Data extends React.Component {
         });
     }
 
+    clearImage(){
+        this.setState({imagePreviewUrl:""})
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
+    }
+
     render() {
-        var schoolsList = this.props.schools.map((school) => {
-            return (
-                <div className="row" key={school._id}>
-                    <div className="col-sm-10" onClick={()=>this.setState({editField: school._id})}>
-                        <InlineEdit
-                            text={school.name}
-                            paramName="name"
-                            change={this.editSchool}
-                            activeClassName="form-control"
-                        />
-
-                    </div>
-                    <div className="col-sm-2">
-                        <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                            this.props.deleteSchool(school._id)
-
-                        }}>
-                            <span className="glyphicon glyphicon-trash"/>
-                        </button>
-                    </div>
-                </div>
-            )
-
-        })
+        let {imagePreviewUrl} = this.state;
+        // var schoolsList = this.props.schools.map((school) => {
+        //     return (
+        //         <div className="row" key={school._id}>
+        //             <div className="col-sm-10" onClick={()=>this.setState({editField: school._id})}>
+        //                 <InlineEdit
+        //                     text={school.name}
+        //                     paramName="name"
+        //                     change={this.editSchool}
+        //                     activeClassName="form-control"
+        //                 />
+        //
+        //             </div>
+        //             <div className="col-sm-2">
+        //                 <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+        //                     this.props.deleteSchool(school._id)
+        //
+        //                 }}>
+        //                     <span className="glyphicon glyphicon-trash"/>
+        //                 </button>
+        //             </div>
+        //         </div>
+        //     )
+        //
+        // })
         var standardsList = this.props.standards.map((standard)=> {
-            return (  <div className="row" key={standard._id}>
-                <div className="col-sm-10" onClick={()=>this.setState({editField: standard._id})}>
-                    <InlineEdit
+            // return (  <div className="row" key={standard._id}>
+            //     <div className="col-sm-10" onClick={()=>this.setState({editField: standard._id})}>
+            //         <InlineEdit
+            //             text={String(standard.name)}
+            //             paramName="name"
+            //             change={this.editStandard}
+            //             activeClassName="form-control"
+            //         />
+            //
+            //     </div>
+            //     <div className="col-sm-2">
+            //         <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+            //             this.props.deleteStandard(standard._id)
+            //
+            //         }}>
+            //             <span className="glyphicon glyphicon-trash"/>
+            //         </button>
+            //     </div>
+            // </div>)
+            return (
+                <tr key={standard._id} >
+                    <td onClick={()=>this.setState({editField: standard._id})}>
+                        <InlineEdit
                         text={String(standard.name)}
                         paramName="name"
                         change={this.editStandard}
                         activeClassName="form-control"
-                    />
+                    /></td>
+                    <td>
+                        <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+                            this.props.deleteStandard(standard._id)
 
-                </div>
-                <div className="col-sm-2">
-                    <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                        this.props.deleteStandard(standard._id)
-
-                    }}>
-                        <span className="glyphicon glyphicon-trash"/>
-                    </button>
-                </div>
-            </div>)
+                        }}>
+                            <span className="glyphicon glyphicon-trash"/>
+                        </button>
+                    </td>
+                </tr>
+            );
         })
         var subjectsList = this.props.subjects.map((subject)=> {
-            return (<div className="row" key={subject._id}>
-                <div className="col-sm-10" onClick={()=>this.setState({editField: subject._id})}>
-                    <InlineEdit
-                        text={subject.name}
-                        paramName="name"
-                        change={this.editSubject}
-                        activeClassName="form-control"
-                    />
+            return (
+                    <tr key={subject._id} >
+                        <td>
+                            <img  className="videoDisplay img-thumbnail" src={subject.image ? subject.image :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png"} />
+                        </td>
+                        <td onClick={()=>this.setState({editField: subject._id})}> <InlineEdit
+                            text={String(subject.name)}
+                            paramName="name"
+                            change={this.editSubject}
+                            activeClassName="form-control"
+                        /></td>
+                        <td>
+                            <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+                                this.props.deleteSubject(subject._id)
 
-                </div>
-                <div className="col-sm-2">
-                    <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                        this.props.deleteSubject(subject._id)
+                            }}>
+                                <span className="glyphicon glyphicon-trash"/>
+                            </button>
+                        </td>
+                    </tr>
+                );
 
-                    }}>
-                        <span className="glyphicon glyphicon-trash"/>
-                    </button>
-                </div>
-            </div>)
+          // return (<div className="row eachNews" key={subject._id}>
+          //       <div  className="cardTest">
+          //           <div className="col-sm-2">
+          //
+          //           </div>
+          //           <div className="col-sm-6" onClick={()=>this.setState({editField: subject._id})}>
+          //               <InlineEdit
+          //                   text={subject.name}
+          //                   paramName="name"
+          //                   change={this.editSubject}
+          //                   activeClassName="form-control"
+          //               />
+          //
+          //           </div>
+          //           <div className="col-sm-2">
+          //
+          //           </div>
+          //       </div>
+          //   </div>)
+            // return (<div className="row" key={subject._id}>
+            //
+            //     <div className="col-sm-4" onClick={()=>this.setState({editField: subject._id})}>
+            //         <img  className="displayImage" src={subject.image ? subject.image :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png"} />
+            //     </div>
+            //
+            //     <div className="col-sm-6" onClick={()=>this.setState({editField: subject._id})}>
+            //         <InlineEdit
+            //             text={subject.name}
+            //             paramName="name"
+            //             change={this.editSubject}
+            //             activeClassName="form-control"
+            //         />
+            //
+            //     </div>
+            //     <div className="col-sm-2">
+            //         <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+            //             this.props.deleteSubject(subject._id)
+            //
+            //         }}>
+            //             <span className="glyphicon glyphicon-trash"/>
+            //         </button>
+            //     </div>
+            // </div>)
         })
         return (
             <div className="container-fluid">
-                <div>
-                    <div className="row dataGrid">
-                        <div className="col-sm-4">
-                            <h3>Schools </h3>
-                            <div className="cardWidget">
-                                <div className="cardBottom">
-                                    <form onSubmit={this.submitSchool}>
-                                        <div className="form-group addbox">
-                                            <input type="text" value={this.state.school} className="form-control"
-                                                   onChange={(e)=>this.setState({school: e.target.value})}
-                                                   placeholder="Add School"/>
+
+                <br/>
+                <ul className="nav nav-tabs">
+                    <li className="active"><a data-toggle="tab" href="#subjects">Subjects</a></li>
+                    <li><a data-toggle="tab" href="#standards">Standards</a></li>
+                </ul>
+
+                <div className="tab-content">
+                    <div id="subjects" className="tab-pane fade in active">
+                        <div id="subjects" className="tab-pane fade in active">
+                            <div className="row">
+                                <div className="cardWidget customCard">
+                                    <div className="cardBottom">
+                                        <div className="row">
+                                            <form onSubmit={this.submitSubject}>
+                                                <div className="form-group">
+                                                    <div className="row mt30">
+                                                        <div className="col-md-3">
+                                                            <label className="colorGray">Subject<span className="required">*</span></label>
+                                                        </div>
+                                                        <div className="col-md-5">
+                                                            <input type="text" className="form-control" value={this.state.subject}
+                                                                   onChange={(e)=>this.setState({subject: e.target.value})}
+                                                                   placeholder="Add Subject"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="row mt30">
+                                                        <div className="col-md-3">
+                                                            <label className="colorGray">Image<span className="required">*</span></label>
+                                                        </div>
+                                                        <div className="col-md-5">
+                                                            <div >
+                                                                {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                                {imagePreviewUrl&&<figure className="browseImg">
+                                                                    <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                                    </figure> }
+                                                            </div>
+                                                            {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                                <button className="btn">Select Image</button>
+                                                                <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                            </div> }
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="row mt30">
+                                                        <div className="col-md-2">
+                                                            <button type="submit" className="btn btn-default ">
+                                                                Submit
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </form>
                                         </div>
-                                        <button type="submit" id="addbutton" className="btn btn-default addbutton">
-                                            Submit
-                                        </button>
-                                    </form>
-                                    {this.props.schools.length > 0 ? schoolsList : "No Schools Added"}
+                                    </div>
+                                </div>
+                                <h3>Subjects List</h3>
+
+                                <div className="gridTable">
+                                    <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>image</th>
+                                            <th>Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {subjectsList }
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-4">
-                            <h3>Subjects </h3>
-                            <div className="cardWidget">
-                                <div className="cardBottom">
-                                    <form onSubmit={this.submitSubject}>
-                                        <div className="form-group addbox">
-                                            <input type="text" className="form-control" value={this.state.subject}
-                                                   onChange={(e)=>this.setState({subject: e.target.value})}
-                                                   placeholder="Add Subject"/>
+                    </div>
+                    <br/>
+                    <div id="standards" className="tab-pane fade">
+                        <div id="standards" className="tab-pane fade in active">
+                            <div className="row">
+                                <div >
+                                    <div className="cardWidget">
+                                        <div className="cardBottom">
+                                            <div className="row">
+                                                <form onSubmit={this.submitStandard}>
+                                                    <div className="form-group addbox">
+                                                        <div className="row mt30">
+                                                            <div className="col-md-3">
+                                                                <label className="colorGray">Standard<span className="required">*</span></label>
+                                                            </div>
+                                                            <div className="col-md-5">
+                                                                <input type="text" className="form-control" value={this.state.standard}
+                                                                       onChange={(e)=>this.setState({standard: e.target.value})}
+                                                                       placeholder="Add Standard"/>
+                                                            </div>
+                                                            <div className="col-md-4">
+                                                                <button type="submit"  className="btn btn-default">
+                                                                    Submit
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-
-
-                                        <button type="submit" id="addbutton" className="btn btn-default addbutton">
-                                            Submit
-                                        </button>
-
-                                    </form>
-                                    <ul className="list-group listData">
-                                        {this.props.subjects.length > 0 ? subjectsList : "No Subjects Added"}
-                                    </ul>
+                                    </div>
+                                </div>
+                                <div >
+                                    <h3>Standards List</h3>
+                                    <div className="gridTable">
+                                        <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {standardsList }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-4">
-                            <h3>Standards </h3>
-                            <div className="cardWidget">
-                                <div className="cardBottom">
-
-                                    <form onSubmit={this.submitStandard}>
-                                        <div className="form-group addbox">
-                                            <input type="Number" className="form-control" value={this.state.standard}
-                                                   onChange={(e)=>this.setState({standard: e.target.value})}
-                                                   placeholder="Add Standard"/>
-                                        </div>
-
-
-                                        <button type="submit" id="addbutton" className="btn btn-default addbutton">
-                                            Submit
-                                        </button>
-
-
-                                    </form>
-                                    <ul className="list-group listData">
-                                        {this.props.standards.length > 0 ? standardsList : "No Standards Added"}
-                                    </ul>
-
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
+                
+                
+                {/*<div className="row">*/}
+                        {/*<div className="col-sm-6">*/}
+                            {/*<div id="subjects" className="tab-pane fade in active">*/}
+                                {/*<div className="row">*/}
+                                        {/*<div className="cardWidget customCard">*/}
+                                            {/*<div className="cardBottom">*/}
+                                                {/*<div className="row">*/}
+                                                    {/*<form onSubmit={this.submitSubject}>*/}
+                                                        {/*<div className="form-group">*/}
+                                                            {/*<div className="row mt30">*/}
+                                                                {/*<div className="col-md-3">*/}
+                                                                    {/*<label className="colorGray">Subject<span className="required">*</span></label>*/}
+                                                                {/*</div>*/}
+                                                                {/*<div className="col-md-5">*/}
+                                                                    {/*<input type="text" className="form-control" value={this.state.subject}*/}
+                                                                           {/*onChange={(e)=>this.setState({subject: e.target.value})}*/}
+                                                                           {/*placeholder="Add Subject"/>*/}
+                                                                {/*</div>*/}
+                                                            {/*</div>*/}
+
+                                                            {/*<div className="row mt30">*/}
+                                                                {/*<div className="col-md-3">*/}
+                                                                    {/*<label className="colorGray">Image<span className="required">*</span></label>*/}
+                                                                {/*</div>*/}
+                                                                {/*<div className="col-md-5">*/}
+                                                                    {/*<div >*/}
+                                                                        {/*{imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}*/}
+                                                                        {/*{imagePreviewUrl&& <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} /> }*/}
+                                                                    {/*</div>*/}
+                                                                    {/*{!imagePreviewUrl && <div className="upload-btn-wrapper">*/}
+                                                                        {/*<button className="btn">Select Image</button>*/}
+                                                                        {/*<input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>*/}
+                                                                    {/*</div> }*/}
+                                                                {/*</div>*/}
+                                                            {/*</div>*/}
+
+                                                            {/*<div className="row mt30">*/}
+                                                                {/*<div className="col-md-8">*/}
+                                                                    {/*<button type="submit" id="addbutton" className="btn btn-default addbutton">*/}
+                                                                        {/*Submit*/}
+                                                                    {/*</button>*/}
+                                                                {/*</div>*/}
+
+                                                            {/*</div>*/}
+
+                                                        {/*</div>*/}
+
+                                                    {/*</form>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div>*/}
+                                        {/*<h3>Subjects List</h3>*/}
+
+                                    {/*<div className="gridTable">*/}
+                                        {/*<table className="table table-striped table-bordered" cellSpacing="0" width="100%">*/}
+                                            {/*<thead>*/}
+                                            {/*<tr>*/}
+                                                {/*<th>image</th>*/}
+                                                {/*<th>Name</th>*/}
+                                                {/*<th>Action</th>*/}
+                                            {/*</tr>*/}
+                                            {/*</thead>*/}
+                                            {/*<tbody>*/}
+                                            {/*{subjectsList }*/}
+                                            {/*</tbody>*/}
+                                        {/*</table>*/}
+                                    {/*</div>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
+                    {/*<div className="col-sm-6">*/}
+                        {/*<div id="standards" className="tab-pane fade in active">*/}
+                            {/*<div className="row">*/}
+                                {/*<div >*/}
+                                    {/*<div className="cardWidget customCard">*/}
+                                        {/*<div className="cardBottom">*/}
+                                            {/*<div className="row">*/}
+                                                {/*<form onSubmit={this.submitStandard}>*/}
+                                                    {/*<div className="form-group addbox">*/}
+                                                        {/*<div className="row mt30">*/}
+                                                            {/*<div className="col-md-3">*/}
+                                                                {/*<label className="colorGray">Standard<span className="required">*</span></label>*/}
+                                                            {/*</div>*/}
+                                                            {/*<div className="col-md-5">*/}
+                                                                {/*<input type="text" className="form-control" value={this.state.standard}*/}
+                                                                       {/*onChange={(e)=>this.setState({standard: e.target.value})}*/}
+                                                                       {/*placeholder="Add Standard"/>*/}
+                                                            {/*</div>*/}
+                                                        {/*</div>*/}
+                                                        {/*<div className="row mt30">*/}
+                                                            {/*<div className="col-md-8">*/}
+                                                                {/*<button type="submit" id="addbutton" className="btn btn-default addbutton">*/}
+                                                                    {/*Submit*/}
+                                                                {/*</button>*/}
+                                                            {/*</div>*/}
+                                                        {/*</div>*/}
+                                                    {/*</div>*/}
+                                                {/*</form>*/}
+                                            {/*</div>*/}
+                                        {/*</div>*/}
+                                    {/*</div>*/}
+                                {/*</div>*/}
+                                {/*<div >*/}
+                                    {/*<h3>Standards List</h3>*/}
+                                    {/*<div className="gridTable">*/}
+                                        {/*<table className="table table-striped table-bordered" cellSpacing="0" width="100%">*/}
+                                            {/*<thead>*/}
+                                            {/*<tr>*/}
+                                                {/*<th>Name</th>*/}
+                                                {/*<th>Action</th>*/}
+                                            {/*</tr>*/}
+                                            {/*</thead>*/}
+                                            {/*<tbody>*/}
+                                            {/*{standardsList }*/}
+                                            {/*</tbody>*/}
+                                        {/*</table>*/}
+                                    {/*</div>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+
+                    {/*</div>*/}
+
 
             </div>
 
@@ -236,6 +526,8 @@ const mapDispatchToProps = (dispatch) => {
         deleteSubject: (subject)=> dispatch(deleteSubject(subject)),
         deleteStandard: (standard)=> dispatch(deleteStandard(standard)),
         deleteSchool: (school)=> dispatch(deleteSchool(school)),
+        uploadVideo: (file) => dispatch(uploadVideo(file)),
+
     };
 }
 

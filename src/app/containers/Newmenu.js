@@ -31,7 +31,7 @@ class Menu extends React.Component {
         const {match} = this.props
         return (
         <div>
-            <div className="header">Welcome To VR Science</div>
+            <div className="header">Welcome To Testing</div>
             <div className="container-fluid" >
                 <div id="sidebar" className="sidenav">
                     <div className="mainLinks">
@@ -52,10 +52,10 @@ class Menu extends React.Component {
                             className="glyphicon glyphicon-facetime-video"/> Videos </NavLink>
 
                         { this.state.superAdmin && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
-                            <span className="glyphicon glyphicon-file"/> Demo Videos </NavLink>
+                            <span className="glyphicon glyphicon-film"/> Demo Videos </NavLink>
                         }
                         { this.state.superAdmin && <NavLink to={match.url + '/codes'} activeClassName="active"  exact>
-                            <span className="glyphicon glyphicon-file"/> Codes </NavLink>
+                            <span className="glyphicon glyphicon-qrcode"/> Codes </NavLink>
                         }
 
                         <NavLink to="/" activeClassName="active" onClick={this.onSignout} exact><span

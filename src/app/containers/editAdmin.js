@@ -83,55 +83,55 @@ class EditUser extends React.Component {
                                 </div>
                                 <div className="modal-body">
                                     <form>
-                                        {this.state.school && <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">School Logo<span className="required">*</span></label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <img src={this.state.schoolLogoUrl} width="30%"  />
-                                                </div>
-                                            </div>
-                                        </div> }
-                                        {this.state.school && <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-3">
-                                                    <label className="colorGray">Upload Logo<span className="required">*</span></label>
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <input type="file" id="test"  onChange={(e)=> {
-                                                        this._handleImageChange(e)
-                                                    }}/>
-                                                    <span><button className="submitButton"
-                                                                  type="submit"
-                                                                  onClick={(e)=>this._handleSubmit(e)}
-                                                                  disabled={!this.state.uri}>Upload</button></span>
-                                                </div>
-                                            </div>
-                                        </div> }    {this.state.school && this.props.progress ? <div className="form-group modalFields">
-                                        <div className="row mt30">
-                                            <div className="col-md-3">
-                                                <label className="colorGray">Logo Url</label>
-                                            </div>
-                                            <div className="col-md-9">
-                                                <input className="form-control" rows="5"
-                                                       id="comment"
-                                                       value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>
-                                            </div>
-                                        </div>
-                                    </div> :""}
-                                        {this.state.school && this.props.progress ? <div className="form-group modalFields">
-                                            <div className="row mt30">
-                                                <div className="col-md-12">
-                                                    <div className="progress">
-                                                        <div className="progress-bar" role="progressbar"
-                                                             style={{width: this.props.progress + "%"}}>
-                                                            {this.props.progress + "%"}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> : ""}
+                                        {/*{this.state.school && <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-3">*/}
+                                                    {/*<label className="colorGray">School Logo<span className="required">*</span></label>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="col-md-9">*/}
+                                                    {/*<img src={this.state.schoolLogoUrl} width="30%"  />*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div> }*/}
+                                        {/*{this.state.school && <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-3">*/}
+                                                    {/*<label className="colorGray">Upload Logo<span className="required">*</span></label>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="col-md-9">*/}
+                                                    {/*<input type="file" id="test"  onChange={(e)=> {*/}
+                                                        {/*this._handleImageChange(e)*/}
+                                                    {/*}}/>*/}
+                                                    {/*<span><button className="submitButton"*/}
+                                                                  {/*type="submit"*/}
+                                                                  {/*onClick={(e)=>this._handleSubmit(e)}*/}
+                                                                  {/*disabled={!this.state.uri}>Upload</button></span>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div> }    {this.state.school && this.props.progress ? <div className="form-group modalFields">*/}
+                                        {/*<div className="row mt30">*/}
+                                            {/*<div className="col-md-3">*/}
+                                                {/*<label className="colorGray">Logo Url</label>*/}
+                                            {/*</div>*/}
+                                            {/*<div className="col-md-9">*/}
+                                                {/*<input className="form-control" rows="5"*/}
+                                                       {/*id="comment"*/}
+                                                       {/*value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>*/}
+                                            {/*</div>*/}
+                                        {/*</div>*/}
+                                    {/*</div> :""}*/}
+                                        {/*{this.state.school && this.props.progress ? <div className="form-group modalFields">*/}
+                                            {/*<div className="row mt30">*/}
+                                                {/*<div className="col-md-12">*/}
+                                                    {/*<div className="progress">*/}
+                                                        {/*<div className="progress-bar" role="progressbar"*/}
+                                                             {/*style={{width: this.props.progress + "%"}}>*/}
+                                                            {/*{this.props.progress + "%"}*/}
+                                                        {/*</div>*/}
+                                                    {/*</div>*/}
+                                                {/*</div>*/}
+                                            {/*</div>*/}
+                                        {/*</div> : ""}*/}
 
                                         <div className="form-group modalFields">
                                             <div className="row mt30">

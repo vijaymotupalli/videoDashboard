@@ -478,6 +478,14 @@ div.dataTables_wrapper div.dataTables_paginate {
     margin: 0 20px 0 0;
     min-width: 110px;
 }
+
+
+.customCard{
+    background-color: #ffffff;
+    box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.16);
+    margin-bottom: 30px;
+    margin: 15px;
+}
 .cardWidget{
     background-color: #ffffff;
     box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.16);
@@ -1086,14 +1094,37 @@ a.article, a.article:hover {
 .dataGrid{
     margin-top: 20px;
 }
-.addbox{
-    width:70%;
-    float:left;
+/*.addbox{*/
+    /*width:70%;*/
+    /*float:left;*/
 
-}
+/*}*/
 .customrow{
 
 }
+.displayImage{
+    border-radius: 50%;
+    width:100px;
+}
+
+.eachNews{
+    margin-right: 5px;
+}
+.cardTest{
+    box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.16);
+    background: #fff;
+    border-radius: 0;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    float: left;
+    margin-top: 10px;
+    width: 100%;
+}
+.videoDisplay{
+    width: 100%;
+    height: 135px;
+}
+
 
 .addbutton{
     width:30%;
@@ -1101,6 +1132,9 @@ a.article, a.article:hover {
 .listData{
     margin-top: 5px;
     text-align: left;
+}
+.urlDisplay{
+    padding-left: 11px;
 }
 
 .banner-sec{background:url(https://static.pexels.com/photos/33972/pexels-photo.jpg)  no-repeat left bottom; background-size:cover; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}
@@ -1257,13 +1291,7 @@ a.article, a.article:hover {
     padding: 30px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     margin: 80px 0 0 0;
-    border-radius: 40px;
 }
-
-
-
-
-
 
 .flip {
     -webkit-perspective: 800px;
@@ -1334,4 +1362,45 @@ a.article, a.article:hover {
 
     font-size: 10px;
     color: grey;
+}
+
+a[aria-expanded="false"]::before, a[aria-expanded="true"]::before{
+    display: none;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.upload-btn-wrapper .btn {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+.corner {
+    position:absolute;
+    top:0;
+    right:0;
+    color: red;
+    cursor: pointer;
+}
+.browseImg{
+    margin:0;
+    height:150px;
+    width: 100%;
+    overflow: hidden;
 }

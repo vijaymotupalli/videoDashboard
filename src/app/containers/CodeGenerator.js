@@ -89,7 +89,7 @@ class CodeGenerator extends React.Component {
                                     <div className="col-sm-4 createdAt">On : {code.usedOn ? moment(code.usedOn).format('DD-MM-YYYY') : "Not Found"}</div>
                                 </div>}
                                 <div className="row">
-                                    <div className="col-sm-8"><strong>Standard : </strong>{code.paidStandards}</div>
+                                    <div className="col-sm-8"><strong>Standard : </strong>{code.paidStandards ? code.paidStandards :"Any"}</div>
                                 </div>
                             </div>
                         )}) : <h2 className="notFound">"No Codes found"</h2>}

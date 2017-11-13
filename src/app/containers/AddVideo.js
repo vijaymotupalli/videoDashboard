@@ -14,36 +14,70 @@ class Addvideo extends React.Component {
             uri: "",
             url: "",
             subject: "",
-            standard: ""
+            standard: "",
+            image:"",
+            file:"",
+            imagePreviewUrl:""
         };
         this._handleSubmit = this._handleSubmit.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        this._handleVideoChange = this._handleVideoChange.bind(this)
         this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
     }
 
+
+    clearImage(){
+        this.setState({imagePreviewUrl:""})
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
+    }
     onSubmit(e) {
         e.preventDefault();
-        const {url, title, description, subject, standard} = this.state;
+        const {url, title, description, subject, standard,file,image} = this.state;
         if(!(title && url && subject && standard)){
             this.props.setVideoError("Fill All Required Fields")
         }else {
-            this.props.postVideo({
-                title: title,
-                description: description,
-                url: url,
-                subject: subject,
-                standard: standard
-            }).then((result, err)=> {
-                this.props.setProgress(0);
-                this.props.setVideoError("");
-                document.getElementById("test").value = ""
-                this.setState({
-                    title: "",
-                    description: "",
-                    uri: "",
-                    url: "",
-                    subject: "",
-                    standard: ""
+
+            this.props.uploadVideo(file).then((result, err)=> {
+                var logoUrl = JSON.parse(result)
+                this.setState({image: logoUrl[0]})
+                this.props.postVideo({
+                    title: title,
+                    description: description,
+                    url: url,
+                    subject: subject,
+                    standard: standard,
+                    videoThumbnail:this.state.image
+                }).then((result, err)=> {
+                    this.props.setProgress(0);
+                    this.props.setVideoError("");
+                    document.getElementById("test").value = ""
+                    this.setState({
+                        title: "",
+                        description: "",
+                        uri: "",
+                        url: "",
+                        subject: "",
+                        standard: "",
+                        file:"",
+                        image:"",
+                        imagePreviewUrl:""
+                    })
                 })
             })
         }
@@ -61,7 +95,7 @@ class Addvideo extends React.Component {
 
     }
 
-    _handleImageChange(e) {
+    _handleVideoChange(e) {
         e.preventDefault();
         this.props.setProgress(0);
         let reader = new FileReader();
@@ -75,6 +109,7 @@ class Addvideo extends React.Component {
     }
 
     render() {
+        const {imagePreviewUrl} = this.state
         var subjects = this.props.subjects ? this.props.subjects : []
         var listSubjects = subjects.map((subject)=> {
             return (
@@ -158,7 +193,7 @@ class Addvideo extends React.Component {
                                             </div>
                                             <div className="col-md-9">
                                                 <input type="file" id="test" accept="video/*" onChange={(e)=> {
-                                                    this._handleImageChange(e)
+                                                    this._handleVideoChange(e)
                                                 }}/>
                                                 <span><button className="submitButton"
                                                               type="submit"
@@ -191,6 +226,26 @@ class Addvideo extends React.Component {
                                             </div>
                                         </div>
                                     </div> : ""}
+
+                                    <div className="form-group modalFields">
+                                        <div className="row mt30">
+                                            <div className="col-md-3">
+                                                <label className="colorGray">Video Thumbnail <span className="required">*</span></label>
+                                            </div>
+                                            <div className="col-md-5">
+                                                <div >
+                                                    {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                    {imagePreviewUrl && <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />}
+                                                </div>
+                                                {!imagePreviewUrl &&  <div className="upload-btn-wrapper">
+                                                    <button className="btn">Select Image</button>
+                                                    <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                </div>}
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                                 <div className="text-center">
                                     <label className="errorcolor">
