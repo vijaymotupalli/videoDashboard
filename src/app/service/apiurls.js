@@ -24,6 +24,10 @@ export const DELETE_USERS_URL = 'api/users'
 export const GET_USER_ROLES = '/api/users/roles'
 export const GET_USER_DETAILS_URL = 'api/users'
 
+export const REUEST_PASSWORD_RESET_CODE = 'resetpassword/requestcode'
+export const VERIFY_CODE = 'resetpassword/verifycode'
+export const CHANGE_PASSWORD = 'resetpassword/changepassword'
+
 
 export const CODES = 'api/codes'
 

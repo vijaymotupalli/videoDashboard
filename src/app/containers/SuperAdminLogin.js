@@ -1,6 +1,8 @@
 import React from "react";
 import {setLoginSuccess, login} from "../actions/index";
 import {connect} from "react-redux";
+import {NavLink} from 'react-router-dom';
+
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './styles.css';
 
@@ -34,10 +36,11 @@ class SuperAdminLogin extends React.Component {
     }
 
     render() {
+        const {match} = this.props
         let {isLoginPending, isLoginSuccess, loginError} = this.props;
         return (
             <div>
-                <section className="login-block">
+                <section className="login-block" >
                     <div className="container login">
                         <div className="row">
                             <div className="login-sec">
@@ -56,9 +59,10 @@ class SuperAdminLogin extends React.Component {
                                     </div>
                                     <div className="form-check">
                                         <label className="form-check-label">
-                                            <input type="checkbox" className="form-check-input" />
-                                                <small> Remember Me</small>
+                                        <input type="checkbox" className="form-check-input" />
+                                        <small> Remember Me</small>
                                         </label>
+                                        <NavLink to={match.url + 'forgotpassword'}  exact className="forgotPassword"> Forgot Password </NavLink>
                                         <br/>
                                         <div className="text-center">
                                             <label className="errorcolor">
@@ -72,10 +76,8 @@ class SuperAdminLogin extends React.Component {
 
                                 </form>
                             </div>
-                            {/*<div className="col-md-8 banner-sec">*/}
-                            {/*</div>*/}
                         </div>
-                        </div>
+                    </div>
                 </section>
             </div>
 

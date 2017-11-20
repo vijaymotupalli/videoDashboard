@@ -1293,6 +1293,13 @@ a.article, a.article:hover {
     margin: 80px 0 0 0;
 }
 
+.forgotPassword{
+    float: right;
+    font-weight: 600;
+    color: brown;
+    font-size: inherit;
+}
+
 .flip {
     -webkit-perspective: 800px;
     perspective: 800px;

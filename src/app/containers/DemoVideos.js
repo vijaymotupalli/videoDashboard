@@ -83,7 +83,7 @@ class DemoVideos extends React.Component {
                                            </div>
                                        </div>
                                        <div className="panel-body">
-                                           <video  controls className="videoDisplay">
+                                           <video  controls className="videoDisplay" poster={video.videoThumbnail ? video.videoThumbnail : "https://vrscience.s3.ap-south-1.amazonaws.com/no-thumbnail.jpg" }>
                                                <source src={video.url}/>
                                            </video>
                                        </div>

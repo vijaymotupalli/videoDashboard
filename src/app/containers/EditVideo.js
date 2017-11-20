@@ -63,9 +63,7 @@ class EditVideo extends React.Component {
         e.preventDefault();
         const {title, description, subject, standard,videoId,file} = this.state;
 
-        this.props.uploadVideo(file).then((result, err)=> {
-            var logoUrl = JSON.parse(result)
-            this.setState({image: logoUrl[0]})
+        if(!file){
             this.props.editVideo({
                 videoId:videoId,
                 title: title,
@@ -79,7 +77,25 @@ class EditVideo extends React.Component {
                     this.props.setSelectedVideo("");
                 }
             })
-        })
+        }else{
+            this.props.uploadVideo(file).then((result, err)=> {
+                var logoUrl = JSON.parse(result)
+                this.setState({image: logoUrl[0]})
+                this.props.editVideo({
+                    videoId:videoId,
+                    title: title,
+                    description: description,
+                    subject: subject,
+                    standard: standard,
+                    videoThumbnail:this.state.image
+                }).then((result,err)=>{
+                    if(!err){
+                        document.getElementById("close").click()
+                        this.props.setSelectedVideo("");
+                    }
+                })
+            })
+        }
 
     }
 

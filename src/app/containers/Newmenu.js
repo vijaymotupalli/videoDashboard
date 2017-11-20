@@ -31,7 +31,7 @@ class Menu extends React.Component {
         const {match} = this.props
         return (
         <div>
-            <div className="header">Welcome To Testing</div>
+            <div className="header">Welcome To VR Science</div>
             <div className="container-fluid" >
                 <div id="sidebar" className="sidenav">
                     <div className="mainLinks">
