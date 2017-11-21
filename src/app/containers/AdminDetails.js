@@ -31,6 +31,16 @@ class UserDetails extends React.Component {
                                         {/*</div>*/}
                                     {/*</div>*/}
                                 {/*</div>}*/}
+                               <div className="cardTop">
+                                <div className="row">
+                                <div className="col-md-12 text-center">
+                                <figure>
+                                <img src={this.props.selectedAdmin.profilePic ?this.props.selectedAdmin.profilePic: "https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png"}  />
+                                </figure>
+                                <figcaption>Profile Pic</figcaption>
+                                </div>
+                                </div>
+                                </div>
                                 <div  className="cardBottom">
                                     <div  className="row">
                                         <div  className="col-md-6">

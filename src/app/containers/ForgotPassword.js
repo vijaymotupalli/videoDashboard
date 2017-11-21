@@ -193,13 +193,13 @@ class ForgotPassword extends React.Component {
                                 <form className="login-form" onSubmit={this.onChangePassword}>
                                     <div className="form-group">
                                         <label htmlFor="exampleInputEmail1" >Password</label>
-                                        <input type="text" className="form-control" placeholder="Enter Old Password"
+                                        <input type="text" className="form-control" placeholder="Enter New Password"
                                                onChange={e => this.setState({password: e.target.value})} value={this.state.password}/>
 
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                                        <input type="password" className="form-control" placeholder="Enter New Password"
+                                        <input type="password" className="form-control" placeholder="Confirm New Password"
                                                onChange={e => this.setState({confirmPassword: e.target.value})} value={this.state.confirmPassword}/>
                                     </div>
                                     <OverlayLoader

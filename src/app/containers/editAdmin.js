@@ -12,13 +12,16 @@ class EditUser extends React.Component {
             name: props.selectedAdmin.name,
             phone: props.selectedAdmin.phone,
             error: "",
-            uri:"",
             address:props.selectedAdmin.address,
             school:props.selectedAdmin.school,
-            url:"",
             schoolLogoUrl:props.selectedAdmin.schoolLogoUrl ? props.selectedAdmin.schoolLogoUrl :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png",
+            image:this.props.selectedAdmin.profilePic ? this.props.selectedAdmin.profilePic:"",
+            file:"",
+            imagePreviewUrl:this.props.selectedAdmin.profilePic ? this.props.selectedAdmin.profilePic:"",
         };
         this.onSubmit = this.onSubmit.bind(this)
+        this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
     }
     componentWillReceiveProps(nextProps){
         this.setState ({
@@ -28,6 +31,9 @@ class EditUser extends React.Component {
             address:nextProps.selectedAdmin.address,
             school:nextProps.selectedAdmin.school,
             schoolLogoUrl:nextProps.selectedAdmin.schoolLogoUrl ? nextProps.selectedAdmin.schoolLogoUrl :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png",
+            image:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:"",
+            file:"",
+            imagePreviewUrl:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:"",
 
         });
     }
@@ -43,34 +49,53 @@ class EditUser extends React.Component {
         })
 
     }
+    clearImage(){
+        this.setState({imagePreviewUrl:""})
+    }
 
     _handleImageChange(e) {
         e.preventDefault();
-        this.props.setProgress(0);
+
         let reader = new FileReader();
         let file = e.target.files[0];
+
         reader.onloadend = () => {
             this.setState({
-                uri: file,
+                file: file,
+                imagePreviewUrl: reader.result
             });
         }
+
         reader.readAsDataURL(file)
     }
+
     onSubmit(e) {
         e.preventDefault();
         this.setState({error:""})
         this.props.setAdminError("");
-        const {email, name, phone ,address,schoolLogoUrl } = this.state;
+        const {email, name, phone ,address,schoolLogoUrl,image, file,imagePreviewUrl } = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-            this.props.editAdmin(email,{name: name, phone: phone,address:address,schoolLogoUrl:schoolLogoUrl}).then((result,err)=> {
-                this.props.setProgress(0);
-                document.getElementById("close").click()
-            })
+            if(!file){
+                this.props.editAdmin(email,{name: name, phone: phone,address:address}).then((result,err)=> {
+                    document.getElementById("close").click()
+                })
+            }else{
+                this.props.uploadVideo(file).then((result, err)=> {
+                    var logoUrl = JSON.parse(result)
+                    this.setState({image: logoUrl[0]})
+                    this.props.editAdmin(email,{name: name, phone: phone,address:address,profilePic:this.state.image}).then((result,err)=> {
+                        document.getElementById("close").click()
+                    })
+                })
+            }
+
         }
     }
     render() {
+        let {imagePreviewUrl} = this.state;
+
         return (
             <div>
                 <div className="container" >
@@ -132,6 +157,23 @@ class EditUser extends React.Component {
                                                 {/*</div>*/}
                                             {/*</div>*/}
                                         {/*</div> : ""}*/}
+                                        <div className="row mt30">
+                                            <div className="col-md-3">
+                                                <label className="colorGray">Profile Pic</label>
+                                            </div>
+                                            <div className="col-md-5">
+                                                <div >
+                                                    {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                    {imagePreviewUrl&&<figure className="browseImg">
+                                                        <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                    </figure> }
+                                                </div>
+                                                {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                    <button className="btn">Select Image</button>
+                                                    <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                </div> }
+                                            </div>
+                                        </div>
 
                                         <div className="form-group modalFields">
                                             <div className="row mt30">

@@ -39,10 +39,11 @@ class User extends React.Component {
         var listAdmins = admins.map(function (admin) {
             return (
                 <tr key={admin._id} onClick={()=>this.selectedAdmin(admin)}>
+                    <td><img src={admin.profilePic ? admin.profilePic : "https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png"}/></td>
                     <td>{admin.name}</td>
                     <td>{admin.email}</td>
                     <td>{admin.phone}</td>
-                    <td>{admin.school ? "School" : "User"}</td>
+                    {/*<td>{admin.school ? "School" : "User"}</td>*/}
                     <td>{admin.createdAt}</td>
                     <td>
                         <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteAdmin(admin._id)}}>Remove</button>
@@ -67,10 +68,11 @@ class User extends React.Component {
                         <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
                             <thead>
                             <tr>
+                                <th>Profile Pic</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Type</th>
+                                {/*<th>Type</th>*/}
                                 <th>Added At</th>
                                 <th>Action</th>
                             </tr>

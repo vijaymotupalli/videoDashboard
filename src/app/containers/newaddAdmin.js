@@ -6,7 +6,8 @@ import './styles.css';
 class Adduser extends React.Component {
     constructor(props) {
         super(props);
-        this.props.getSchools();
+        this.props.setAdminError("");
+       // this.props.getSchools();
         this.state = {
             email: "",
             name: "",
@@ -16,13 +17,15 @@ class Adduser extends React.Component {
             address:"",
             school:"",
             error: "",
-            url: "",
-            uri: "",
+            image:"",
+            file:"",
+            imagePreviewUrl:""
         };
 
         this.onSubmit = this.onSubmit.bind(this)
         this._handleSubmit = this._handleSubmit.bind(this)
         this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
     }
 
     _handleSubmit(e) {
@@ -37,16 +40,23 @@ class Adduser extends React.Component {
 
     }
 
+    clearImage(){
+        this.setState({imagePreviewUrl:""})
+    }
+
     _handleImageChange(e) {
         e.preventDefault();
-        this.props.setProgress(0);
+
         let reader = new FileReader();
         let file = e.target.files[0];
+
         reader.onloadend = () => {
             this.setState({
-                uri: file
+                file: file,
+                imagePreviewUrl: reader.result
             });
         }
+
         reader.readAsDataURL(file)
     }
 
@@ -54,23 +64,33 @@ class Adduser extends React.Component {
         e.preventDefault();
         this.setState({error:""})
         this.props.setAdminError("");
-        const {email, name,password,phone,address,school,url} = this.state;
+        const {email, name,password,phone,address,school,image, file,imagePreviewUrl} = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-           this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address,schoolLogoUrl:url}).then((result,err)=> {
-               if(!err){
-                   this.props.setProgress(0);
-                   document.getElementById("rad1").checked = false;
-                   document.getElementById("rad2").checked = false;
-                   this.setState({
-                       email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false,url:"",uri:""
-                   })
-               }
+            this.props.uploadVideo(file).then((result, err)=> {
+                var logoUrl = JSON.parse(result)
+                this.setState({image: logoUrl[0]})
+                this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address,profilePic:this.state.image}).then((result,err)=> {
+                    if(!err){
+                        // document.getElementById("rad1").checked = false;
+                        document.getElementById("close").click()
+                        //document.getElementById("rad2").checked = false;
+                        this.setState({
+                            email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false, image:"",
+                            file:"",
+                            imagePreviewUrl:""
+                        })
+                    }
+                })
+
             })
+
         }
     }
     render() {
+        let {imagePreviewUrl} = this.state;
+
         // var schools = this.props.schools ? this.props.schools : []
         // var listSchools = schools.map(function (school) {
         //     return (
@@ -84,11 +104,28 @@ class Adduser extends React.Component {
                         <div className="modal-dialog modal-lg">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" className="close"  id="close" data-dismiss="modal">&times;</button>
                                     <h4 className="modal-title">Add Admin</h4>
                                 </div>
                                 <div className="modal-body">
                                     <form>
+                                        <div className="row mt30">
+                                            <div className="col-md-3">
+                                                <label className="colorGray">Profile Pic</label>
+                                            </div>
+                                            <div className="col-md-5">
+                                                <div >
+                                                    {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                    {imagePreviewUrl&&<figure className="browseImg">
+                                                        <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                    </figure> }
+                                                </div>
+                                                {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                    <button className="btn">Select Image</button>
+                                                    <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                </div> }
+                                            </div>
+                                        </div>
                                         <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-3">
@@ -145,6 +182,7 @@ class Adduser extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
+
                                         {/*<div className="form-group modalFields">*/}
                                             {/*<div className="row mt30">*/}
                                                 {/*<div className="col-md-3">*/}
