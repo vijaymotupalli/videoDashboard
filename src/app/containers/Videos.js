@@ -48,13 +48,13 @@ class Videos extends React.Component {
                    <Addvideo/>
                    <EditVideo/>
                    <div className="row" id="title">
-                       <div className="col-sm-10" id="userslist">All Videos</div>
-                       {!this.state.superAdmin && <div className="col-sm-2" >
+                       <div className="col-md-10" id="userslist">All Videos</div>
+                    <div className="col-md-2" >
                            <button type="button" className="btn btn-info btn-sm" data-toggle="modal"
                                    data-target="#addvideo">
                                <span className="glyphicon glyphicon-plus"/> Upload Video
                            </button>
-                       </div>}
+                       </div>
 
                    </div>
                    <div className="filter">
@@ -70,14 +70,14 @@ class Videos extends React.Component {
                    >
                        {this.props.videos.length > 0 ? this.props.videos.map((video)=> {
                            return (
-                               <div className="container, col-sm-4" key={video._id} style={{textAlign:"left"}}>
+                               <div className="container, col-md-3" key={video._id} style={{textAlign:"left"}}>
                                    <div  className="panel panel-default productWidget">
                                        <div className="panel-heading">
                                            <div className="row">
-                                               <div className="col-sm-10">
+                                               <div className="col-md-10">
                                                    <div className="videoTitle"> {video.title}</div>
                                                </div>
-                                               <div className="col-sm-2">
+                                               <div className="col-md-2">
                                                    <button type="button" className="btn btn-default btn-sm" onClick={()=> {
                                                        this.props.setSelectedVideo(video)
                                                    }} data-toggle="modal" data-target="#editVideo">
@@ -87,31 +87,23 @@ class Videos extends React.Component {
                                            </div>
                                        </div>
                                        <div className="panel-body">
-                                           <video  controls className="videoDisplay" poster={video.videoThumbnail ? video.videoThumbnail : "https://vrscience.s3.ap-south-1.amazonaws.com/no-thumbnail.jpg" }>
+                                           <video  controls controlsList="nodownload" className="videoDisplay" poster={video.videoThumbnail ? video.videoThumbnail : "https://vrscience.s3.ap-south-1.amazonaws.com/no-thumbnail.jpg" }>
                                                <source src={video.url}/>
                                            </video>
                                        </div>
                                        <div className="panel-footer">
-                                           {this.state.superAdmin && <div className="row urlDisplay">
-                                               <div className="col-sm-1">
-                                                   <p ><strong>Url : </strong></p>
-                                               </div>
-                                               <div className="col-sm-10">
-                                                   <input type="text" className="form-control" disabled value={video.url}/>
-                                               </div>
-                                           </div>}
                                            <div className="row">
-                                               <div className="col-sm-8">
+                                               <div className="col-md-8">
                                                    <p ><strong>Subject :</strong> <strong ><span
                                                        className="label label-primary">{(video.subject && video.subject.name ) ? (video.subject.name):"No Subject"}</span></strong> </p>
                                                </div>
                                            </div>
                                            <div className="row">
-                                               <div className="col-sm-8">
+                                               <div className="col-md-8">
                                                    <p ><strong>Standard : </strong><strong><span style={{marginLeft:"auto"}}
                                                        className="label label-success">{(video.standard && video.standard.name) ? (video.standard.name) :"No Standard"}</span></strong> </p>
                                                </div>
-                                               <div className="col-sm-4">
+                                               <div className="col-md-4">
                                                    <button type="button" className="btn btn-default btn-sm" onClick={()=> {
                                                        this.onDeleteVideo(video)
                                                    }}>

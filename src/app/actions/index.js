@@ -1,5 +1,5 @@
 import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_VIDEOS,SET_MY_PROFILE,SET_PROGRESS,
-    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS,SET_CODES} from './types'
+    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS,SET_CODES,SET_FORGOT_PASSWORD_ERROR} from './types'
 import {post,get,put,_delete} from "../service/api";
 import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,GET_DEMO_VIDEOS_URL,
 SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER,APP_USERS,CODES,REUEST_PASSWORD_RESET_CODE,VERIFY_CODE,CHANGE_PASSWORD} from "../service/apiurls"
@@ -29,6 +29,15 @@ export function setLoginError(loginError) {
         loginError
     }
 }
+
+export function setForgotPasswordError(forgotPasswordError) {
+    return {
+        type: SET_FORGOT_PASSWORD_ERROR,
+        forgotPasswordError
+    }
+}
+
+
 export function setVideoError(videoError) {
     return {
         type: SET_VIDEO_ERROR ,
@@ -780,63 +789,54 @@ export function deleteVideo(video) {
 }
 
 export function requestCodeToResetPassword(user) {
-    console.log("---user----",user)
+
   //  var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
         return new Promise (function (resolve,reject) {
            // var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
-            post(REUEST_PASSWORD_RESET_CODE,"",user)
-                .then(function (response,err) {
-                    resolve()
+           return post(REUEST_PASSWORD_RESET_CODE,"",user)
+                .then(function (response) {
+                  resolve()
+                },function (error) {
+                   reject(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg)
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        console.log('----request code error-----',error)
-                       // dispatch(setUserError(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg))
-                    }
-                    reject()
+                   reject(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg)
                 });
         })
 
     }
 }
 export function verifyCode(user) {
-    console.log("---user----",user)
+
   //  var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
         return new Promise (function (resolve,reject) {
            // var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
             post(VERIFY_CODE,"",user)
-                .then(function (response,err) {
-                    resolve()
+                .then(function (response) {
+                   return resolve()
+                },function (error) {
+                    return reject(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg)
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        console.log('----Verify code error-----',error)
-                       // dispatch(setUserError(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg))
-                    }
-                    reject()
+                   return reject(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg)
                 });
         })
 
     }
 }
 export function changePassword(user) {
-    console.log("---user----",user)
-  //  var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
         return new Promise (function (resolve,reject) {
-           // var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
             post(CHANGE_PASSWORD,"",user)
-                .then(function (response,err) {
+                .then(function (response) {
                     resolve()
+                },function (error) {
+                  reject(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg)
                 })
                 .catch(function (error) {
-                    if (error.response) {
-                        console.log('----Change Password error-----',error)
-                       // dispatch(setUserError(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg))
-                    }
-                    reject()
+                    reject(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg)
                 });
         })
 

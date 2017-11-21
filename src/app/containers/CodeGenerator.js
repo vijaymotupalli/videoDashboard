@@ -75,11 +75,12 @@ class CodeGenerator extends React.Component {
                     </div>
 
                 </div>
+                {/*navajowhite*/}
 
                 <div className="codesDisplay">
                     {this.props.codes.length > 0 ? this.props.codes.map((code)=> {
                         return (
-                            <div className="displayCode" key={code._id}>
+                            <div className={code.usedBy ? "displayUsedCode" :"displayNotUsedCode"} key={code._id}>
                                 <div className="row">
                                     <div className="col-sm-8 "><strong>Code : </strong>{code.code}</div>
                                     <div className="col-sm-4 createdAt">{moment(code.createdAt).format('DD-MM-YYYY')}</div>

@@ -62,7 +62,7 @@ class SuperAdminLogin extends React.Component {
                                         <input type="checkbox" className="form-check-input" />
                                         <small> Remember Me</small>
                                         </label>
-                                        <NavLink to={match.url + 'forgotpassword'}  exact className="forgotPassword"> Forgot Password </NavLink>
+                                        <NavLink to={match.url + 'forgotpassword'}  exact className="forgotPassword"> Forgot Password ? </NavLink>
                                         <br/>
                                         <div className="text-center">
                                             <label className="errorcolor">

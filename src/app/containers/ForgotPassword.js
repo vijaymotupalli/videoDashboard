@@ -1,13 +1,11 @@
 import React from "react";
-import {setLoginSuccess, login,requestCodeToResetPassword,verifyCode,changePassword} from "../actions/index";
+import {requestCodeToResetPassword,verifyCode,changePassword,setForgotPasswordError} from "../actions/index";
 import {connect} from "react-redux";
 import {NavLink} from 'react-router-dom';
 
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './styles.css';
 import OverlayLoader from 'react-overlay-loading/lib/OverlayLoader'
-
-import Loadable from 'react-loading-overlay'
 
 class ForgotPassword extends React.Component {
     constructor(props) {
@@ -31,12 +29,6 @@ class ForgotPassword extends React.Component {
         this.showLogin = this.showLogin.bind(this);
         this.onCodeSubmit = this.onCodeSubmit.bind(this);
     }
-    componentWillMount(props){
-        if (localStorage.getItem("loginuser")) {
-            this.props.setLoginSuccess(true);
-            this.props.history.push("/dashboard/videos")
-        }else this.props.setLoginSuccess(false);
-    }
 
     onSubmit(e) {
         e.preventDefault();
@@ -51,46 +43,61 @@ class ForgotPassword extends React.Component {
     }
     onForgotPasswordSubmit(e) {
         e.preventDefault();
+        this.props.setForgotPasswordError("")
         const {email} = this.state;
-        console.log("-----iam submitted email-----",email)
-        this.setState({loader:true})
-        this.props.requestCodeToResetPassword({email:email}).then((result,err)=> {
-            if(err){
-                console.log("----error in submitting email-----",err)
-            }
-            this.setState({loader:false})
-            this.setState({showForgotPassword:false,showEnterCode:true})
-        })
+        if(!email)this.props.setForgotPasswordError("Please Enter Email")
+        else{
+            this.setState({loader:true})
+            this.props.requestCodeToResetPassword({email:email}).then((result)=> {
+                this.setState({loader:false})
+                this.setState({showForgotPassword:false,showEnterCode:true})
+            },(error)=>{
+                this.setState({loader:false})
+                this.props.setForgotPasswordError(error);
+            })
+        }
+
 
     }
     onCodeSubmit(e) {
         e.preventDefault();
+        this.props.setForgotPasswordError("")
         const {email,code} = this.state;
-        console.log("-----iam submitted- code----",this.state.code)
-        this.props.verifyCode({email:email,code:code}).then((result,err)=> {
-            if(err){
-                console.log("----error in submitting code-----",err)
-            }
-            this.setState({showEnterCode:false,showChangePassword:true})
-        })
-
+       if(!code){this.props.setForgotPasswordError("Please Enter Code You Received")}
+        else if(!email){this.props.setForgotPasswordError("Email Cant Be Empty")}
+        else{
+           this.setState({loader:true})
+           this.props.verifyCode({email:email,code:code}).then((result)=> {
+               this.setState({loader:false})
+               this.setState({showEnterCode:false,showChangePassword:true})
+           },(err)=>{
+               this.setState({loader:false})
+               this.props.setForgotPasswordError(err);
+           })
+       }
     }
 
 
     onChangePassword(e) {
+        this.props.setForgotPasswordError("")
         e.preventDefault();
         const {password,confirmPassword,email} = this.state;
-        console.log("-----iam submitted chnage password-----",email,password,confirmPassword)
-        if(password != confirmPassword ){
-            console.log("----password not matched-----")
-        }
+        if(!password || !confirmPassword){
+            this.props.setForgotPasswordError("Please Fill Password and Confirm Password !")
 
-        this.props.changePassword({email:email,password:password}).then((result,err)=> {
-            if(err){
-                console.log("----error in Changing password-----",err)
-            }
-            this.setState({showChangePassword:false,showChangePasswordSuccess:true,password:"",email:"",code:"",confirmPassword:""})
-        })
+        }else if(password != confirmPassword ){
+            this.props.setForgotPasswordError("Password Mismatched !")
+        }else{
+            this.setState({loader:true})
+            this.props.changePassword({email:email,password:password}).then((result)=> {
+                this.setState({loader:false})
+                this.setState({showChangePassword:false,showChangePasswordSuccess:true,password:"",email:"",code:"",confirmPassword:""})
+
+            },(err)=>{
+                this.setState({loader:false})
+                this.props.setForgotPasswordError(err);
+            })
+        }
 
     }
 
@@ -102,9 +109,7 @@ class ForgotPassword extends React.Component {
         this.setState({showForgotPassword:true,showLogin:false})
     }
     render() {
-        console.log("----forgotpassword-----");
-        const {match} = this.props
-        let {isLoginPending, isLoginSuccess, loginError} = this.props;
+        let {forgotPasswordError} = this.props;
         return (
             <div>
                 {this.state.showForgotPassword && <section className="login-block" >
@@ -114,7 +119,7 @@ class ForgotPassword extends React.Component {
                                     <h2 className="text-center">Forgot Password ?</h2>
                                     <form className="login-form" onSubmit={this.onForgotPasswordSubmit}>
                                         <div className="form-group">
-                                            <label htmlFor="exampleInputEmail1">Username</label>
+                                            <label htmlFor="exampleInputEmail1">Email</label>
                                             <input type="text" className="form-control" placeholder="You Will Receive Code On Registered Email"
                                                    onChange={e => this.setState({email: e.target.value})} value={this.state.email}/>
 
@@ -130,10 +135,13 @@ class ForgotPassword extends React.Component {
                                         >
                                         </OverlayLoader>
 
-                                        <div className="form-check">
+                                        <br/>
+                                        <div className="text-center">
+                                            <label className="errorcolor">
+                                                { forgotPasswordError && <div>{forgotPasswordError}</div> }
+                                            </label><br/>
                                             <button type="submit" className="btn btn-login float-right">Submit</button>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -153,7 +161,20 @@ class ForgotPassword extends React.Component {
 
                                     </div>
 
-                                    <div className="form-check">
+                                    <OverlayLoader
+                                        color={'red'} // default is white
+                                        loader="ScaleLoader" // check below for more loaders
+                                        text="Loading... Please wait!"
+                                        active={this.state.loader}
+                                        backgroundColor={'white'} // default is black
+                                        opacity="0.4" // default is .9
+                                    >
+                                    </OverlayLoader>
+
+                                    <div className="text-center">
+                                        <label className="errorcolor">
+                                            { forgotPasswordError && <div>{forgotPasswordError}</div> }
+                                        </label><br/>
                                         <button type="submit" className="btn btn-login float-right">Submit</button>
                                     </div>
 
@@ -181,17 +202,23 @@ class ForgotPassword extends React.Component {
                                         <input type="password" className="form-control" placeholder="Enter New Password"
                                                onChange={e => this.setState({confirmPassword: e.target.value})} value={this.state.confirmPassword}/>
                                     </div>
-                                    <div className="form-check">
+                                    <OverlayLoader
+                                        color={'red'} // default is white
+                                        loader="ScaleLoader" // check below for more loaders
+                                        text="Loading... Please wait!"
+                                        active={this.state.loader}
+                                        backgroundColor={'white'} // default is black
+                                        opacity="0.4" // default is .9
+                                    >
+                                    </OverlayLoader>
                                         <br/>
                                         <div className="text-center">
                                             <label className="errorcolor">
-                                                { isLoginPending && <div>Please wait...</div>  }
-                                                { isLoginSuccess && <div>Success.</div> }
-                                                { loginError && <div>{loginError}</div> }
+                                                { forgotPasswordError && <div>{forgotPasswordError}</div> }
                                             </label><br/>
                                             <button type="submit" className="btn btn-login float-right">Submit</button>
                                         </div>
-                                    </div>
+
 
                                 </form>
                             </div>
@@ -204,7 +231,7 @@ class ForgotPassword extends React.Component {
                     <div className="container login">
                         <div className="row">
                             <div className="login-sec">
-                                <h2 className="text-center">Password Changed Successfully click <NavLink to='/' exact> HERE </NavLink> to login</h2>
+                                <h2 className="text-center">Password Changed Successfully click <span className="link"><NavLink to='/' exact> HERE </NavLink></span>  to login</h2>
                             </div>
                         </div>
                     </div>
@@ -220,16 +247,13 @@ class ForgotPassword extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoginPending: state.Login.isLoginPending,
-        isLoginSuccess: state.Login.isLoginSuccess,
-        loginError: state.Login.loginError
+        forgotPasswordError: state.Login.forgotPasswordError
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setLoginSuccess: (status) => dispatch(setLoginSuccess(status)),
-        login: (email, password) => dispatch(login(email, password)),
+        setForgotPasswordError: (error) => dispatch(setForgotPasswordError(error)),
         requestCodeToResetPassword: (data) => dispatch(requestCodeToResetPassword(data)),
         verifyCode: (data) => dispatch(verifyCode(data)),
         changePassword: (data) => dispatch(changePassword(data)),

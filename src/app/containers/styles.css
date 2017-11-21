@@ -259,7 +259,7 @@ div.dataTables_wrapper div.dataTables_info {
 }
 .videoDisplay{
     width: 100%;
-    height: 135px;
+    height: 130px;
 }
 .notFound{
     margin-left: 33%;
@@ -1120,10 +1120,6 @@ a.article, a.article:hover {
     margin-top: 10px;
     width: 100%;
 }
-.videoDisplay{
-    width: 100%;
-    height: 135px;
-}
 
 
 .addbutton{
@@ -1344,8 +1340,16 @@ a.article, a.article:hover {
 }
 .inner{margin:0 !important;}
 
-.displayCode{
+.displayNotUsedCode{
     background: #fff;
+    padding: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    margin: 10px 5px 0 0;
+    width: 19%;
+    display: inline-block;
+}
+.displayUsedCode{
+    background-color: navajowhite;
     padding: 10px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     margin: 10px 5px 0 0;
@@ -1410,4 +1414,9 @@ a[aria-expanded="false"]::before, a[aria-expanded="true"]::before{
     height:150px;
     width: 100%;
     overflow: hidden;
+}
+
+.link{
+    color: blue;
+
 }

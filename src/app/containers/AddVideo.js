@@ -17,7 +17,8 @@ class Addvideo extends React.Component {
             standard: "",
             image:"",
             file:"",
-            imagePreviewUrl:""
+            imagePreviewUrl:"",
+            isDemo:(props.data && props.data.isDemo)?props.data.isDemo:false
         };
         this._handleSubmit = this._handleSubmit.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -48,11 +49,10 @@ class Addvideo extends React.Component {
     }
     onSubmit(e) {
         e.preventDefault();
-        const {url, title, description, subject, standard,file,image} = this.state;
+        const {url, title, description, subject, standard,file,image,isDemo} = this.state;
         if(!(title && url && subject && standard)){
             this.props.setVideoError("Fill All Required Fields")
         }else {
-
             this.props.uploadVideo(file).then((result, err)=> {
                 var logoUrl = JSON.parse(result)
                 this.setState({image: logoUrl[0]})
@@ -62,7 +62,8 @@ class Addvideo extends React.Component {
                     url: url,
                     subject: subject,
                     standard: standard,
-                    videoThumbnail:this.state.image
+                    videoThumbnail:this.state.image,
+                    isDemo:isDemo
                 }).then((result, err)=> {
                     this.props.setProgress(0);
                     this.props.setVideoError("");
