@@ -9,17 +9,39 @@ class Menu extends React.Component {
         super(props)
         this.onSignout = this.onSignout.bind(this)
         this.state = {
-            superAdmin :false
+            superAdmin :false,
+            qlab:false,
+            contentUploader:false,
+            institute:false
         }
         this.onSignout = this.onSignout.bind(this)
     }
     componentWillMount(){
         var role = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).role :"";
-        if(role == "SUPER_ADMIN"){
-            this.setState({
-                superAdmin:true
-            })
+        switch (role) {
+            case "SUPER_ADMIN":
+                this.setState({
+                    superAdmin:true
+                })
+                break;
+            case "QLAB":
+                this.setState({
+                    qlab:true
+                })
+                break;
+            case "CONTENT_UPLOADER":
+                this.setState({
+                    contentUploader:true
+                })
+                break;
+
+            case "INSTITUTE":
+                this.setState({
+                    institute:true
+                })
+                break;
         }
+
 
     }
 
@@ -38,23 +60,29 @@ class Menu extends React.Component {
                         <NavLink to={match.url + '/myprofile'} activeClassName="active" exact><span
                             className="glyphicon glyphicon-user"/> My Profile </NavLink>
 
-                        { this.state.superAdmin && <NavLink to={match.url + '/data'} activeClassName="active"  exact>
+                        { this.state.qlab && <NavLink to={match.url + '/data'} activeClassName="active"  exact>
                             <span className="glyphicon glyphicon-file"/> Data </NavLink>
                         }
 
-                            {this.state.superAdmin && <NavLink to={match.url + '/admins'} activeClassName="active"  exact>
-                                <span className="glyphicon glyphicon-stats" /> Admins </NavLink>}
+                            {this.state.qlab && <NavLink to={match.url + '/contentuploaders'} activeClassName="active"  exact>
+                                <span className="glyphicon glyphicon-stats" /> Content Uploaders </NavLink>}
 
-                        {this.state.superAdmin && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
+                        {this.state.qlab && <NavLink to={match.url + '/superadmins'} activeClassName="active"  exact>
+                                <span className="glyphicon glyphicon-stats" /> Super Admins </NavLink>}
+
+                        {(this.state.superAdmin || this.state.qlab) && <NavLink to={match.url + '/institutes'} activeClassName="active"  exact>
+                                <span className="glyphicon glyphicon-stats" /> Institutes </NavLink>}
+
+                        {(this.state.qlab || this.state.institute) && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
                             <span className="glyphicon glyphicon-stats" /> Users </NavLink>}
 
                         <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
                             className="glyphicon glyphicon-facetime-video"/> Videos </NavLink>
 
-                        { this.state.superAdmin && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
+                        { this.state.qlab && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
                             <span className="glyphicon glyphicon-film"/> Demo Videos </NavLink>
                         }
-                        { this.state.superAdmin && <NavLink to={match.url + '/codes'} activeClassName="active"  exact>
+                        { this.state.qlab && <NavLink to={match.url + '/codes'} activeClassName="active"  exact>
                             <span className="glyphicon glyphicon-qrcode"/> Codes </NavLink>
                         }
 

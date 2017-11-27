@@ -117,6 +117,10 @@ export function login(email, password) {
                     dispatch(setLoginPending(false));
                     dispatch(setLoginError(error.response.data.msg.message ? error.response.data.msg.message :error.response.data.msg))
                     reject(error)
+                }else{
+                    dispatch(setLoginPending(false));
+                    dispatch(setLoginError("Network Error"));
+                    reject("Network Error")
                 }
             });
         })
