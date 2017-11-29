@@ -18,6 +18,16 @@ class Myprofile extends React.Component {
                 <div  className="row">
                     <div  className="col-md-12">
                         <div  className="cardWidget">
+                            <div className="cardTop">
+                                <div className="row">
+                                    <div className="col-md-12 text-center">
+                                        <figure>
+                                            <img src={this.props.myprofile.profilePic ?this.props.myprofile.profilePic: "https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png"}  />
+                                        </figure>
+                                        <figcaption>Profile Pic</figcaption>
+                                    </div>
+                                </div>
+                            </div>
                             <div  className="cardBottom">
                                 <div  className="row">
                                     <div  className="col-md-6">
@@ -37,7 +47,7 @@ class Myprofile extends React.Component {
                         </div>
                     </div>
                 </div>
-                <EditUser />
+                {this.props.myprofile && <EditUser selectedAdmin={this.props.myprofile}/> }
             </div>
 
         )

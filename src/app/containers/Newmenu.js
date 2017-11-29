@@ -42,7 +42,6 @@ class Menu extends React.Component {
                 break;
         }
 
-
     }
 
     onSignout(e) {

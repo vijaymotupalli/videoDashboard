@@ -7,6 +7,7 @@ import './styles.css';
 class EditUser extends React.Component {
     constructor(props) {
         super(props);
+        console.log("---iam in edit component----",props)
         this.state = {
             email: props.selectedAdmin.email,
             name: props.selectedAdmin.name,
@@ -15,10 +16,11 @@ class EditUser extends React.Component {
             address:props.selectedAdmin.address,
             school:props.selectedAdmin.school,
             schoolLogoUrl:props.selectedAdmin.schoolLogoUrl ? props.selectedAdmin.schoolLogoUrl :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png",
-            image:this.props.selectedAdmin.profilePic ? this.props.selectedAdmin.profilePic:"",
+            image:props.selectedAdmin.profilePic ? props.selectedAdmin.profilePic:"",
             file:"",
-            imagePreviewUrl:this.props.selectedAdmin.profilePic ? this.props.selectedAdmin.profilePic:"",
+            imagePreviewUrl:props.selectedAdmin.profilePic ? props.selectedAdmin.profilePic:"",
         };
+        console.log(this.state);
         this.onSubmit = this.onSubmit.bind(this)
         this._handleImageChange = this._handleImageChange.bind(this)
         this.clearImage = this.clearImage.bind(this)
@@ -32,10 +34,10 @@ class EditUser extends React.Component {
             school:nextProps.selectedAdmin.school,
             schoolLogoUrl:nextProps.selectedAdmin.schoolLogoUrl ? nextProps.selectedAdmin.schoolLogoUrl :"https://codeuniverse.s3.ap-south-1.amazonaws.com/no_image_placeholder.png",
             image:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:"",
-            file:"",
-            imagePreviewUrl:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:"",
-
+            imagePreviewUrl:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:""
         });
+        console.log("afetr rec",this.state);
+
     }
 
     _handleSubmit(e) {
@@ -45,7 +47,7 @@ class EditUser extends React.Component {
 
             var logoUrl = JSON.parse(result)
 
-            this.setState({url: logoUrl[0],schoolLogoUrl:logoUrl[0]})
+            this.setState({url: logoUrl[0],schoolLogoUrl:logoUrl[0],imagePreviewUrl:logoUrl[0]})
         })
 
     }
@@ -84,7 +86,7 @@ class EditUser extends React.Component {
             }else{
                 this.props.uploadVideo(file).then((result, err)=> {
                     var logoUrl = JSON.parse(result)
-                    this.setState({image: logoUrl[0]})
+                    this.setState({image: logoUrl[0],imagePreviewUrl:logoUrl[0]})
                     this.props.editAdmin(email,{name: name, phone: phone,address:address,profilePic:this.state.image}).then((result,err)=> {
                         document.getElementById("close").click()
                     })
@@ -95,7 +97,6 @@ class EditUser extends React.Component {
     }
     render() {
         let {imagePreviewUrl} = this.state;
-
         return (
             <div>
                 <div className="container" >
@@ -108,55 +109,7 @@ class EditUser extends React.Component {
                                 </div>
                                 <div className="modal-body">
                                     <form>
-                                        {/*{this.state.school && <div className="form-group modalFields">*/}
-                                            {/*<div className="row mt30">*/}
-                                                {/*<div className="col-md-3">*/}
-                                                    {/*<label className="colorGray">School Logo<span className="required">*</span></label>*/}
-                                                {/*</div>*/}
-                                                {/*<div className="col-md-9">*/}
-                                                    {/*<img src={this.state.schoolLogoUrl} width="30%"  />*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
-                                        {/*</div> }*/}
-                                        {/*{this.state.school && <div className="form-group modalFields">*/}
-                                            {/*<div className="row mt30">*/}
-                                                {/*<div className="col-md-3">*/}
-                                                    {/*<label className="colorGray">Upload Logo<span className="required">*</span></label>*/}
-                                                {/*</div>*/}
-                                                {/*<div className="col-md-9">*/}
-                                                    {/*<input type="file" id="test"  onChange={(e)=> {*/}
-                                                        {/*this._handleImageChange(e)*/}
-                                                    {/*}}/>*/}
-                                                    {/*<span><button className="submitButton"*/}
-                                                                  {/*type="submit"*/}
-                                                                  {/*onClick={(e)=>this._handleSubmit(e)}*/}
-                                                                  {/*disabled={!this.state.uri}>Upload</button></span>*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
-                                        {/*</div> }    {this.state.school && this.props.progress ? <div className="form-group modalFields">*/}
-                                        {/*<div className="row mt30">*/}
-                                            {/*<div className="col-md-3">*/}
-                                                {/*<label className="colorGray">Logo Url</label>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="col-md-9">*/}
-                                                {/*<input className="form-control" rows="5"*/}
-                                                       {/*id="comment"*/}
-                                                       {/*value={this.state.url ?this.state.url :"please wait getting URL ....."} disabled="disabled"/>*/}
-                                            {/*</div>*/}
-                                        {/*</div>*/}
-                                    {/*</div> :""}*/}
-                                        {/*{this.state.school && this.props.progress ? <div className="form-group modalFields">*/}
-                                            {/*<div className="row mt30">*/}
-                                                {/*<div className="col-md-12">*/}
-                                                    {/*<div className="progress">*/}
-                                                        {/*<div className="progress-bar" role="progressbar"*/}
-                                                             {/*style={{width: this.props.progress + "%"}}>*/}
-                                                            {/*{this.props.progress + "%"}*/}
-                                                        {/*</div>*/}
-                                                    {/*</div>*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
-                                        {/*</div> : ""}*/}
+
                                         <div className="row mt30">
                                             <div className="col-md-3">
                                                 <label className="colorGray">Profile Pic</label>
@@ -181,6 +134,9 @@ class EditUser extends React.Component {
                                                     <label className="colorGray">Email</label>
                                                 </div>
                                                 <div className="col-md-9">
+                                                    {/*<div className="panel panel-default">*/}
+                                                        {/*<div className="panel-body">{this.state.email}</div>*/}
+                                                    {/*</div>*/}
                                                     <input type="email"  className="form-control" placeholder="Type Email ID" name="email"
                                                            value={this.state.email} disabled/>
                                                 </div>

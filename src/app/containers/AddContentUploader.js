@@ -7,7 +7,6 @@ class Adduser extends React.Component {
     constructor(props) {
         super(props);
         this.props.setAdminError("");
-        console.log("-----props-----",props)
        // this.props.getSchools();
         this.state = {
             email: "",
@@ -21,7 +20,8 @@ class Adduser extends React.Component {
             image:"",
             file:"",
             imagePreviewUrl:"",
-            title:props.data.title
+            title:props.data.title,
+            role:props.data.role
         };
 
         this.onSubmit = this.onSubmit.bind(this)
@@ -66,14 +66,14 @@ class Adduser extends React.Component {
         e.preventDefault();
         this.setState({error:""})
         this.props.setAdminError("");
-        const {email, name,password,phone,address,school,image, file,imagePreviewUrl} = this.state;
+        const {email, name,password,phone,address,school,image, file,imagePreviewUrl,role} = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
             this.props.uploadVideo(file).then((result, err)=> {
                 var logoUrl = JSON.parse(result)
                 this.setState({image: logoUrl[0]})
-                this.props.addAdmin({email: email, name: name, password:password,school:school,phone:phone,address:address,profilePic:this.state.image}).then((result,err)=> {
+                this.props.addAdmin({email: email,role:role, name: name, password:password,school:school,phone:phone,address:address,profilePic:this.state.image}).then((result,err)=> {
                     if(!err){
                         // document.getElementById("rad1").checked = false;
                         document.getElementById("close").click()
@@ -117,9 +117,9 @@ class Adduser extends React.Component {
                                             </div>
                                             <div className="col-md-5">
                                                 <div >
-                                                    {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                    {imagePreviewUrl &&<div className="glyphicon corner" style={{width:"50%"}} onClick={this.clearImage}>&#xe088;</div>}
                                                     {imagePreviewUrl&&<figure className="browseImg">
-                                                        <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                        <img src={this.state.imagePreviewUrl} style={{width:"50%",marginTop:"10px"}} />
                                                     </figure> }
                                                 </div>
                                                 {!imagePreviewUrl && <div className="upload-btn-wrapper">

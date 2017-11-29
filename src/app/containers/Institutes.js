@@ -15,7 +15,7 @@ class User extends React.Component {
         this.onDeleteAdmin = this.onDeleteAdmin.bind(this);
     }
     componentDidMount() {
-        this.props.getAdmins();
+        this.props.getAdmins({role:3});
     }
     selectedAdmin(admin){
         const {context,history} = this.props
@@ -23,13 +23,13 @@ class User extends React.Component {
         history.push(this.props.match.url+"/"+admin.email)
     }
 
-    onDeleteAdmin(userId){
+    onDeleteAdmin(userId,role){
         confirmAlert({
             title: 'Confirm To Delete',                        // Title dialog
             message: 'Are you sure to do this.',               // Message dialog
             confirmLabel: 'Confirm',                           // Text button confirm
             cancelLabel: 'Cancel',                             // Text button cancel
-            onConfirm: () => this.props.deleteAdmin(userId)   // Action after Confirm
+            onConfirm: () => this.props.deleteAdmin(userId,role)   // Action after Confirm
         })
 
     }
@@ -46,7 +46,7 @@ class User extends React.Component {
                     {/*<td>{admin.school ? "School" : "User"}</td>*/}
                     <td>{admin.createdAt}</td>
                     <td>
-                        <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteAdmin(admin._id)}}>Remove</button>
+                        <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteAdmin(admin._id,{role:3})}}>Remove</button>
                     </td>
                 </tr>
             );
@@ -54,7 +54,7 @@ class User extends React.Component {
         return (
             <div>
                 <div>
-                    <Newadd data={{title:"Add Institute"}}/>
+                    <Newadd data={{title:"Add Institute",role:"3"}}/>
                     <div className="row" id="title">
                         <div className="col-sm-10" id="userslist">Institutes</div>
                         <div className="col-sm-2" >
@@ -97,9 +97,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAdmins: () => dispatch(getAdmins()),
+        getAdmins: (role) => dispatch(getAdmins(role)),
         selectedAdminData: (data) => dispatch(selectedAdminData(data)),
-        deleteAdmin: (adminId) => dispatch(deleteAdmin(adminId)),
+        deleteAdmin: (adminId,role) => dispatch(deleteAdmin(adminId,role)),
     };
 }
 
