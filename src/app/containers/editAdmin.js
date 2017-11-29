@@ -163,9 +163,9 @@ class EditUser extends React.Component {
                                             </div>
                                             <div className="col-md-5">
                                                 <div >
-                                                    {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                    {imagePreviewUrl &&<div className="glyphicon corner "  style={{width:"50%"}} onClick={this.clearImage}>&#xe088;</div>}
                                                     {imagePreviewUrl&&<figure className="browseImg">
-                                                        <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                        <img src={this.state.imagePreviewUrl} style={{width:"50%",marginTop:"10px"}} />
                                                     </figure> }
                                                 </div>
                                                 {!imagePreviewUrl && <div className="upload-btn-wrapper">
