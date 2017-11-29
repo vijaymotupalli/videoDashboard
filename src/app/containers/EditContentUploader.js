@@ -7,7 +7,6 @@ import './styles.css';
 class EditUser extends React.Component {
     constructor(props) {
         super(props);
-        console.log("---iam in edit component----",props)
         this.state = {
             email: props.selectedAdmin.email,
             name: props.selectedAdmin.name,
@@ -20,7 +19,6 @@ class EditUser extends React.Component {
             file:"",
             imagePreviewUrl:props.selectedAdmin.profilePic ? props.selectedAdmin.profilePic:"",
         };
-        console.log(this.state);
         this.onSubmit = this.onSubmit.bind(this)
         this._handleImageChange = this._handleImageChange.bind(this)
         this.clearImage = this.clearImage.bind(this)
@@ -36,7 +34,7 @@ class EditUser extends React.Component {
             image:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:"",
             imagePreviewUrl:nextProps.selectedAdmin.profilePic ? nextProps.selectedAdmin.profilePic:""
         });
-        console.log("afetr rec",this.state);
+
 
     }
 

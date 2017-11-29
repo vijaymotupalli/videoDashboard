@@ -7,7 +7,6 @@ import moment from 'moment'
 class UserDetails extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props)
         this.props.getAdminDetails(props.match.params.contentuploaderId)
         this.state={
             selectedAdmin:props.match.params.contentuploaderId,

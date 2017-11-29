@@ -1,5 +1,5 @@
 import React from "react";
-import {uploadVideo, setProgress, postVideo,setVideoError,getStandards,getSubjects} from "../actions/index";
+import {uploadVideo,uploadImage, setProgress, postVideo,setVideoError,getStandards,getSubjects} from "../actions/index";
 import {connect} from "react-redux";
 import './styles.css';
 
@@ -8,6 +8,7 @@ class Addvideo extends React.Component {
         super(props);
         this.props.getSubjects();
         this.props.getStandards();
+        this.props.setProgress(0)
         this.state = {
             title: "",
             description: "",
@@ -25,6 +26,7 @@ class Addvideo extends React.Component {
         this._handleVideoChange = this._handleVideoChange.bind(this)
         this._handleImageChange = this._handleImageChange.bind(this)
         this.clearImage = this.clearImage.bind(this)
+        this.cancel = this.cancel.bind(this)
     }
 
 
@@ -53,7 +55,7 @@ class Addvideo extends React.Component {
         if(!(title && url && subject && standard)){
             this.props.setVideoError("Fill All Required Fields")
         }else {
-            this.props.uploadVideo(file).then((result, err)=> {
+            this.props.uploadImage(file).then((result, err)=> {
                 var logoUrl = JSON.parse(result)
                 this.setState({image: logoUrl[0]})
                 this.props.postVideo({
@@ -84,6 +86,8 @@ class Addvideo extends React.Component {
         }
     }
 
+
+
     _handleSubmit(e) {
         e.preventDefault();
         const {uri} = this.state;
@@ -94,6 +98,13 @@ class Addvideo extends React.Component {
             this.setState({url: videoUrl[0]})
         })
 
+    }
+
+    cancel(e) {
+        e.preventDefault();
+      this.setState({uri:"",url:"",image:"",imagePreviewUrl:""})
+        this.props.setProgress(0)
+        document.getElementById("test").value = ""
     }
 
     _handleVideoChange(e) {
@@ -130,7 +141,7 @@ class Addvideo extends React.Component {
                         <div className="modal-dialog modal-lg">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" onClick={this.cancel} className="close" data-dismiss="modal">&times;</button>
                                     <h4 className="modal-title">Upload Video</h4>
                                 </div>
                                 <div className="modal-body">
@@ -256,7 +267,7 @@ class Addvideo extends React.Component {
                                 <div className="modal-footer">
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <button type="button" className="btn blackButton" data-dismiss="modal"
+                                            <button type="button" className="btn blackButton" data-dismiss="modal" onClick={this.cancel}
                                                     style={{width: "100%", background: "#fff", color: "#333"}}>Cancel
                                             </button>
                                         </div>
@@ -290,6 +301,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         uploadVideo: (file) => dispatch(uploadVideo(file)),
+        uploadImage: (file) => dispatch(uploadImage(file)),
         postVideo: (video) => dispatch(postVideo(video)),
         setProgress: (progress) => dispatch(setProgress(progress)),
         setVideoError: (videoError) => dispatch(setVideoError(videoError)),

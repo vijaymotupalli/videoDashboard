@@ -756,6 +756,47 @@ export function uploadVideo(file) {
 
 }
 
+export function uploadImage(file) {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        return new Promise(function (resolve,reject) {
+            var formData = new FormData();
+            formData.append("file", file);
+            var xhr = new XMLHttpRequest();
+            var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+            xhr.open('POST', UPLOAD_VIDEO_URL);
+            xhr.setRequestHeader("Authorization",authToken );
+
+            xhr.upload.addEventListener("progress", progressFunction, false);
+
+            xhr.onprogress = function () {
+
+            };
+
+            xhr.onreadystatechange = function () {
+
+                if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+
+                    resolve(xhr.responseText)
+
+                }
+            };
+            xhr.onerror = function (error) {
+
+                reject(error)
+            };
+
+            xhr.onload = function () {
+
+            };
+
+            xhr.send(formData);
+
+        })
+    }
+
+}
+
 export function editVideo(video) {
     var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
     return  dispatch => {
