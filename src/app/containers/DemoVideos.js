@@ -17,16 +17,37 @@ class DemoVideos extends React.Component {
         super(props)
         this.props.getDemoVideos()
         this.state = {
-            superAdmin :false
+            superAdmin :false,
+            qlab:false,
+            contentUploader:false,
+            institute:false
         }
         this.onDeleteVideo = this.onDeleteVideo.bind(this)
     }
     componentWillMount(){
         var role = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).role :"";
-        if(role == "SUPER_ADMIN"){
-            this.setState({
-                superAdmin:true
-            })
+        switch (role) {
+            case "SUPER_ADMIN":
+                this.setState({
+                    superAdmin:true
+                })
+                break;
+            case "QLAB":
+                this.setState({
+                    qlab:true
+                })
+                break;
+            case "CONTENT_UPLOADER":
+                this.setState({
+                    contentUploader:true
+                })
+                break;
+
+            case "INSTITUTE":
+                this.setState({
+                    institute:true
+                })
+                break;
         }
 
     }
@@ -49,7 +70,7 @@ class DemoVideos extends React.Component {
                    <EditVideo/>
                    <div className="row" id="title">
                        <div className="col-sm-10" id="userslist">Demo Videos</div>
-                       {this.state.superAdmin && <div className="col-sm-2" >
+                       {(this.state.qlab || this.state.contentUploader) && <div className="col-sm-2" >
                            <button type="button" className="btn btn-info btn-sm" data-toggle="modal"
                                    data-target="#addvideo">
                                <span className="glyphicon glyphicon-plus"/> Upload Video

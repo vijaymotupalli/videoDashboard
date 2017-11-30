@@ -34,12 +34,14 @@ class CodeGenerator extends React.Component {
         var paidStandards = this.state.paidStandards ?  this.state.paidStandards :""
         var numberOfCodes = this.state.numberOfCodes
         var institute = this.state.institute
-        this.props.setLoader(true);
-        this.props.postCodes({paidStandards,numberOfCodes,institute}).then( (result)=> {
-            this.props.setLoader(false)
-        }, (error)=> {
-            if(error)this.props.setLoader(false);
-        })
+            this.props.setLoader(true);
+            this.props.postCodes({paidStandards,numberOfCodes,institute}).then( (result)=> {
+                this.props.setLoader(false)
+            }, (error)=> {
+                if(error)this.props.setLoader(false);
+            })
+
+
     }
 
     handleStandardChange (value) {
@@ -89,7 +91,7 @@ class CodeGenerator extends React.Component {
                         </div>
 
                         <div className="col-sm-3">
-                            <button type="button" className="btn btn-default btn-sm btnDefault" onClick={this.onSubmit}>
+                            <button type="button" className="btn btn-default btn-sm btnDefault" onClick={this.onSubmit} disabled={!this.state.numberOfCodes}>
                                 <span className="glyphicon glyphicon-filter" /> Generate Codes
                             </button>
                         </div>

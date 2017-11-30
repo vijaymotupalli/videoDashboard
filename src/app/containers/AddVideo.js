@@ -55,34 +55,63 @@ class Addvideo extends React.Component {
         if(!(title && url && subject && standard)){
             this.props.setVideoError("Fill All Required Fields")
         }else {
-            this.props.uploadImage(file).then((result, err)=> {
-                var logoUrl = JSON.parse(result)
-                this.setState({image: logoUrl[0]})
-                this.props.postVideo({
-                    title: title,
-                    description: description,
-                    url: url,
-                    subject: subject,
-                    standard: standard,
-                    videoThumbnail:this.state.image,
-                    isDemo:isDemo
-                }).then((result, err)=> {
-                    this.props.setProgress(0);
-                    this.props.setVideoError("");
-                    document.getElementById("test").value = ""
-                    this.setState({
-                        title: "",
-                        description: "",
-                        uri: "",
-                        url: "",
-                        subject: "",
-                        standard: "",
-                        file:"",
-                        image:"",
-                        imagePreviewUrl:""
+            if(file){
+                this.props.uploadImage(file).then((result, err)=> {
+                    var logoUrl = JSON.parse(result)
+                    this.setState({image: logoUrl[0]})
+                    this.props.postVideo({
+                        title: title,
+                        description: description,
+                        url: url,
+                        subject: subject,
+                        standard: standard,
+                        videoThumbnail:this.state.image,
+                        isDemo:isDemo
+                    }).then((result, err)=> {
+                        this.props.setProgress(0);
+                        this.props.setVideoError("");
+                        document.getElementById("test").value = ""
+                        this.setState({
+                            title: "",
+                            description: "",
+                            uri: "",
+                            url: "",
+                            subject: "",
+                            standard: "",
+                            file:"",
+                            image:"",
+                            imagePreviewUrl:""
+                        })
                     })
                 })
-            })
+            }else{
+                this.props.postVideo({
+                        title: title,
+                        description: description,
+                        url: url,
+                        subject: subject,
+                        standard: standard,
+                        videoThumbnail:this.state.image,
+                        isDemo:isDemo
+                    }).then((result, err)=> {
+                        // this.props.setProgress(0);
+                        this.props.setVideoError("");
+                        document.getElementById("test").value = ""
+                        this.setState({
+                            title: "",
+                            description: "",
+                            uri: "",
+                            url: "",
+                            subject: "",
+                            standard: "",
+                            file:"",
+                            image:"",
+                            imagePreviewUrl:""
+                        })
+                    })
+
+            }
+
         }
     }
 

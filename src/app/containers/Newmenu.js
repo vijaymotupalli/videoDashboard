@@ -75,10 +75,10 @@ class Menu extends React.Component {
                         {(this.state.qlab || this.state.institute) && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
                             <span className="glyphicon glyphicon-stats" /> Users </NavLink>}
 
-                        <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
-                            className="glyphicon glyphicon-facetime-video"/> Videos </NavLink>
+                        {(this.state.qlab || this.state.contentUploader) &&   <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
+                            className="glyphicon glyphicon-facetime-video"/> Videos </NavLink> }
 
-                        { this.state.qlab && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
+                        { (this.state.qlab || this.state.contentUploader)  && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
                             <span className="glyphicon glyphicon-film"/> Demo Videos </NavLink>
                         }
                         { this.state.qlab && <NavLink to={match.url + '/codes'} activeClassName="active"  exact>

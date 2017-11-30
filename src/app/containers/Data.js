@@ -18,7 +18,10 @@ class Data extends React.Component {
         this.state = {
             school: "", subject: "", standard: "", editField: "", disabled: true, image:"",
             file:"",
-            imagePreviewUrl:""
+            imagePreviewUrl:"",superAdmin :false,
+            qlab:false,
+            contentUploader:false,
+            institute:false
         }
         this.editSchool = this.editSchool.bind(this);
         this.editSubject = this.editSubject.bind(this);
@@ -28,6 +31,31 @@ class Data extends React.Component {
         this.submitSubject = this.submitSubject.bind(this);
         this._handleImageChange = this._handleImageChange.bind(this)
         this.clearImage = this.clearImage.bind(this)
+
+        var role = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).role :"";
+        switch (role) {
+            case "SUPER_ADMIN":
+                this.setState({
+                    superAdmin:true
+                })
+                break;
+            case "QLAB":
+                this.setState({
+                    qlab:true
+                })
+                break;
+            case "CONTENT_UPLOADER":
+                this.setState({
+                    contentUploader:true
+                })
+                break;
+
+            case "INSTITUTE":
+                this.setState({
+                    institute:true
+                })
+                break;
+        }
     }
 
     editSchool(school) {

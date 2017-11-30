@@ -794,6 +794,12 @@ export function uploadImage(file) {
             xhr.open('POST', UPLOAD_VIDEO_URL);
             xhr.setRequestHeader("Authorization",authToken );
 
+            function progressFunction(evt){
+                if (evt.lengthComputable) {
+                   // dispatch(setProgress((Math.round(evt.loaded / evt.total * 100))))
+                }
+            }
+
             xhr.upload.addEventListener("progress", progressFunction, false);
 
             xhr.onprogress = function () {

@@ -17,16 +17,38 @@ class Videos extends React.Component {
         super(props)
         this.props.getVideos()
         this.state = {
-            superAdmin :false
+            superAdmin :false,
+            qlab:false,
+            contentUploader:false,
+            institute:false
         }
         this.onDeleteVideo = this.onDeleteVideo.bind(this)
+
     }
     componentWillMount(){
         var role = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).role :"";
-        if(role == "SUPER_ADMIN"){
-            this.setState({
-                superAdmin:true
-            })
+        switch (role) {
+            case "SUPER_ADMIN":
+                this.setState({
+                    superAdmin:true
+                })
+                break;
+            case "QLAB":
+                this.setState({
+                    qlab:true
+                })
+                break;
+            case "CONTENT_UPLOADER":
+                this.setState({
+                    contentUploader:true
+                })
+                break;
+
+            case "INSTITUTE":
+                this.setState({
+                    institute:true
+                })
+                break;
         }
 
     }
@@ -49,13 +71,13 @@ class Videos extends React.Component {
                    <EditVideo/>
                    <div className="row" id="title">
                        <div className="col-md-10" id="userslist">All Videos</div>
-                    <div className="col-md-2" >
+                       {(this.state.qlab || this.state.contentUploader) && <div className="col-md-2" >
                            <button type="button" className="btn btn-info btn-sm" data-toggle="modal"
                                    data-target="#addvideo">
                                <span className="glyphicon glyphicon-plus"/> Upload Video
                            </button>
                        </div>
-
+                       }
                    </div>
                    <div className="filter">
                        <ApplyFilter/>
