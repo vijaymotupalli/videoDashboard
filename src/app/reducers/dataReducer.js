@@ -1,9 +1,10 @@
-import {SET_SUBJECTS,SET_STANDARDS,SET_SCHOOLS} from '../actions/types'
+import {SET_SUBJECTS,SET_STANDARDS,SET_SCHOOLS,SET_INSTITUTES_DATA} from '../actions/types'
 
 export default function VideoReducer(state = {
     subjects: [],
     standards: [],
-    schools: []
+    schools: [],
+    institutes:[]
 }, action) {
     switch (action.type) {
 
@@ -23,6 +24,12 @@ export default function VideoReducer(state = {
             return state = {
                 ...state,
                 schools: action.payload
+            };
+            break;
+            case SET_INSTITUTES_DATA:
+            return state = {
+                ...state,
+                institutes: action.payload
             };
             break;
         default:

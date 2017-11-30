@@ -1,8 +1,9 @@
 import {SET_LOGIN_PENDING,SET_LOGIN_SUCCESS,SET_LOGIN_ERROR,SELECTED_VIDEO,SET_VIDEOS,SET_MY_PROFILE,SET_PROGRESS,
-    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS,SET_CODES,SET_FORGOT_PASSWORD_ERROR} from './types'
+    SET_VIDEO_ERROR,SET_SCHOOLS,SET_STANDARDS,SET_SUBJECTS,SET_DEMO_VIDEOS,SET_CODES,SET_FORGOT_PASSWORD_ERROR,SELECTED_CODE_GROUP} from './types'
 import {post,get,put,_delete} from "../service/api";
 import {LOGIN_URL,GET_VIDEOS_URL,GET_MY_PROFILE_URL,UPLOAD_VIDEO_URL,POST_VIDEO_URL,EDIT_VIDEO_URL,GET_DEMO_VIDEOS_URL,
-SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,APPLY_FILTER,APP_USERS,CODES,REUEST_PASSWORD_RESET_CODE,VERIFY_CODE,CHANGE_PASSWORD} from "../service/apiurls"
+SCHOOLS,STANDARDS,SUBJECTS,GET_USERS_URL,POST_USERS_URL,GET_USER_ROLES,DELETE_USERS_URL,GET_USER_DETAILS_URL,
+    APPLY_FILTER,APP_USERS,CODES,REUEST_PASSWORD_RESET_CODE,VERIFY_CODE,CHANGE_PASSWORD,GET_INSTITUTES} from "../service/apiurls"
 import {LOGIN_TOKEN_TYPE,ADMIN_TOKEN_TYPE} from "../service/tokenTypes"
 
 import btoa from "btoa"
@@ -48,6 +49,12 @@ export function setSelectedVideo(video) {
     return {
         type: SELECTED_VIDEO,
         payload:video
+    }
+}
+export function setSelectedCodeGroup(codeGroup) {
+    return {
+        type: SELECTED_CODE_GROUP,
+        payload:codeGroup
     }
 }
 export function setDemoVideos(videos) {
@@ -311,6 +318,13 @@ export function setAdminsData(adminsData) {
         payload:adminsData
     }
 }
+export function setInstitutesData(institutesData) {
+
+    return {
+        type: "SET_INSTITUTES_DATA",
+        payload:institutesData
+    }
+}
 export function setUsersData(usersData) {
 
     return {
@@ -328,6 +342,19 @@ export function getAdmins(role) {
         }, function (error) {
             if (error.response) {
                 console.log("----error in get admins-------",error)
+            }
+        });
+    }
+}
+export function getInstitutes() {
+    var AUTH_TOKEN = JSON.parse(localStorage.getItem('loginuser')) ? JSON.parse(localStorage.getItem('loginuser')).access_token :"";
+    return  dispatch => {
+        var authToken = ADMIN_TOKEN_TYPE+" "+AUTH_TOKEN
+        get(GET_INSTITUTES,authToken).then(function (institutes) {
+            dispatch(setInstitutesData(institutes));
+        }, function (error) {
+            if (error.response) {
+                console.log("----error in get institutes-------",error)
             }
         });
     }

@@ -18,6 +18,8 @@ export const SCHOOLS = 'data/schools';
 
 export const APP_USERS = 'app/users'
 
+export const GET_INSTITUTES = 'api/institutes'
+
 export const GET_USERS_URL = 'api/users'
 export const POST_USERS_URL = 'api/users'
 export const DELETE_USERS_URL = 'api/users'
