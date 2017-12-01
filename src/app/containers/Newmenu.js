@@ -12,12 +12,16 @@ class Menu extends React.Component {
             superAdmin :false,
             qlab:false,
             contentUploader:false,
-            institute:false
+            institute:false,
+            userName:"",profilePic:""
         }
         this.onSignout = this.onSignout.bind(this)
     }
     componentWillMount(){
         var role = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).role :"";
+        var userName = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).name :"";
+        var profilePic = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).profilePic :"";
+        this.setState({userName:userName,profilePic:profilePic})
         switch (role) {
             case "SUPER_ADMIN":
                 this.setState({
@@ -55,6 +59,19 @@ class Menu extends React.Component {
             <div className="header">Welcome To VR Science</div>
             <div className="container-fluid" >
                 <div id="sidebar" className="sidenav">
+                    <div className="profileView">
+                        <div className="cardTop">
+                            <div className="row">
+                                <div className="col-md-12 text-center">
+                                    <figure>
+                                        <img src={this.state.profilePic} className="profilePic" />
+                                    </figure>
+                                    <figcaption>{this.state.userName}</figcaption>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="mainLinks">
                         <NavLink to={match.url + '/myprofile'} activeClassName="active" exact><span
                             className="glyphicon glyphicon-user"/> My Profile </NavLink>
@@ -64,16 +81,16 @@ class Menu extends React.Component {
                         }
 
                             {this.state.qlab && <NavLink to={match.url + '/contentuploaders'} activeClassName="active"  exact>
-                                <span className="glyphicon glyphicon-stats" /> Content Uploaders </NavLink>}
+                                <span className="glyphicon glyphicon-film" /> Content Uploaders </NavLink>}
 
                         {this.state.qlab && <NavLink to={match.url + '/superadmins'} activeClassName="active"  exact>
                                 <span className="glyphicon glyphicon-stats" /> Super Admins </NavLink>}
 
                         {(this.state.superAdmin || this.state.qlab) && <NavLink to={match.url + '/institutes'} activeClassName="active"  exact>
-                                <span className="glyphicon glyphicon-stats" /> Institutes </NavLink>}
+                                <span className="glyphicon glyphicon-home" /> Institutes </NavLink>}
 
                         {(this.state.qlab || this.state.institute) && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
-                            <span className="glyphicon glyphicon-stats" /> Users </NavLink>}
+                            <span className="glyphicon glyphicon-th-list"/> Users </NavLink>}
 
                         {(this.state.qlab || this.state.contentUploader) &&   <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
                             className="glyphicon glyphicon-facetime-video"/> Videos </NavLink> }

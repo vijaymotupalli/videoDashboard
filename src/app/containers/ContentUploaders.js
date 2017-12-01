@@ -8,6 +8,8 @@ import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
 import 'style-loader!react-confirm-alert/src/react-confirm-alert.css'
 
 import {Route, Link, Switch} from 'react-router-dom';
+import moment from 'moment'
+
 
 class User extends React.Component {
     constructor(props) {
@@ -44,7 +46,7 @@ class User extends React.Component {
                     <td>{admin.email}</td>
                     <td>{admin.phone}</td>
                     {/*<td>{admin.school ? "School" : "User"}</td>*/}
-                    <td>{admin.createdAt}</td>
+                    <td>{moment(admin.createdAt).format('LL')}</td>
                     <td>
                         <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteAdmin(admin._id,{role:2})}}>Remove</button>
                     </td>

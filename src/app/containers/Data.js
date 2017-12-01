@@ -7,6 +7,7 @@ import {uploadVideo,
     editSchool, editSubject, editStandard, deleteSubject, deleteStandard, deleteSchool
 } from "../actions/index";
 import  moment from 'moment'
+import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
 
 
 class Data extends React.Component {
@@ -21,7 +22,7 @@ class Data extends React.Component {
             imagePreviewUrl:"",superAdmin :false,
             qlab:false,
             contentUploader:false,
-            institute:false
+            institute:false,standardError:"",subjectError:"",disableButton:false
         }
         this.editSchool = this.editSchool.bind(this);
         this.editSubject = this.editSubject.bind(this);
@@ -31,31 +32,30 @@ class Data extends React.Component {
         this.submitSubject = this.submitSubject.bind(this);
         this._handleImageChange = this._handleImageChange.bind(this)
         this.clearImage = this.clearImage.bind(this)
+        this.onDeleteStandard = this.onDeleteStandard.bind(this)
+        this.onDeleteSubject = this.onDeleteSubject.bind(this)
 
-        var role = JSON.parse(localStorage.getItem("loginuser")) ? JSON.parse(localStorage.getItem('loginuser')).role :"";
-        switch (role) {
-            case "SUPER_ADMIN":
-                this.setState({
-                    superAdmin:true
-                })
-                break;
-            case "QLAB":
-                this.setState({
-                    qlab:true
-                })
-                break;
-            case "CONTENT_UPLOADER":
-                this.setState({
-                    contentUploader:true
-                })
-                break;
+    }
 
-            case "INSTITUTE":
-                this.setState({
-                    institute:true
-                })
-                break;
-        }
+    onDeleteSubject(subject){
+        confirmAlert({
+            title: 'Confirm To Delete',                        // Title dialog
+            message: 'Are you sure to do this.',               // Message dialog
+            confirmLabel: 'Confirm',                           // Text button confirm
+            cancelLabel: 'Cancel',                             // Text button cancel
+            onConfirm: () => this.props.deleteSubject(subject)   // Action after Confirm
+        })
+
+    }
+    onDeleteStandard(standard){
+        confirmAlert({
+            title: 'Confirm To Delete',                        // Title dialog
+            message: 'Are you sure to do this.',               // Message dialog
+            confirmLabel: 'Confirm',                           // Text button confirm
+            cancelLabel: 'Cancel',                             // Text button cancel
+            onConfirm: () => this.props.deleteStandard(standard)   // Action after Confirm
+        })
+
     }
 
     editSchool(school) {
@@ -81,8 +81,12 @@ class Data extends React.Component {
 
     submitSubject(e) {
         e.preventDefault();
+      //  this.setState({subjectError:""})
+        this.setState({disableButton:true})
         const {subject,file} = this.state;
         if(!(subject && file )){
+           // this.setState({subjectError:"Please Fill Required Fields"})
+            this.setState({disableButton:false})
         }else {
             this.props.uploadVideo(file).then((result, err)=> {
                 var logoUrl = JSON.parse(result)
@@ -91,6 +95,7 @@ class Data extends React.Component {
                     name: subject,
                     image: this.state.image
                 }).then((result, err)=> {
+                    this.setState({disableButton:false})
                     this.setState({
                         subject: "",
                         file: "",
@@ -106,11 +111,15 @@ class Data extends React.Component {
 
     submitStandard(e) {
         e.preventDefault();
+        this.setState({standardError:""})
         const {standard} = this.state;
-        this.props.addStandard({name: standard});
-        this.setState({
-            standard: ''
-        });
+        if(!standard){this.setState({standardError:"Please Fill Required Fields"})}else{
+            this.props.addStandard({name: standard});
+            this.setState({
+                standard: ''
+            });
+        }
+
     }
 
     clearImage(){
@@ -189,8 +198,8 @@ class Data extends React.Component {
                         activeClassName="form-control"
                     /></td>
                     <td>
-                        <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                            this.props.deleteStandard(standard._id)
+                        <button type="button" className="btn btn-default btn-sm" onClick={(e)=> {e.stopPropagation();
+                            this.onDeleteStandard(standard._id)
 
                         }}>
                             <span className="glyphicon glyphicon-trash"/>
@@ -212,8 +221,9 @@ class Data extends React.Component {
                             activeClassName="form-control"
                         /></td>
                         <td>
-                            <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                                this.props.deleteSubject(subject._id)
+                            <button type="button" className="btn btn-default btn-sm" onClick={(e)=> {
+                                e.stopPropagation();
+                                this.onDeleteSubject(subject._id)
 
                             }}>
                                 <span className="glyphicon glyphicon-trash"/>
@@ -268,7 +278,6 @@ class Data extends React.Component {
         })
         return (
             <div className="container-fluid">
-
                 <br/>
                 <ul className="nav nav-tabs">
                     <li className="active"><a data-toggle="tab" href="#subjects">Subjects</a></li>
@@ -278,80 +287,106 @@ class Data extends React.Component {
                 <div className="tab-content">
                     <div id="subjects" className="tab-pane fade in active">
                         <div id="subjects" className="tab-pane fade in active">
-                            <div className="row">
-                                <div className="cardWidget customCard">
-                                    <div className="cardBottom">
-                                        <div className="row">
-                                            <form onSubmit={this.submitSubject}>
-                                                <div className="form-group">
-                                                    <div className="row mt30">
-                                                        <div className="col-md-3">
-                                                            <label className="colorGray">Subject<span className="required">*</span></label>
-                                                        </div>
-                                                        <div className="col-md-5">
-                                                            <input type="text" className="form-control" value={this.state.subject}
-                                                                   onChange={(e)=>this.setState({subject: e.target.value})}
-                                                                   placeholder="Add Subject"/>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="row mt30">
-                                                        <div className="col-md-3">
-                                                            <label className="colorGray">Image<span className="required">*</span></label>
-                                                        </div>
-                                                        <div className="col-md-5">
-                                                            <div >
-                                                                {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
-                                                                {imagePreviewUrl&&<figure className="browseImg">
-                                                                    <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
-                                                                    </figure> }
+                                <div className="row">
+                                    <div className="displaySubject">
+                                        <h3>Subjects List</h3>
+                                        <div className="gridTable">
+                                            <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>image</th>
+                                                    <th>Name</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {subjectsList }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div className="addSubject">
+                                        <div className="cardWidget customCard">
+                                            <div className="cardBottom">
+                                                <div className="row">
+                                                    <form onSubmit={this.submitSubject}>
+                                                        <div className="form-group">
+                                                            <div className="row mt30">
+                                                                <div className="col-md-3">
+                                                                    <label className="colorGray">Subject<span className="required">*</span></label>
+                                                                </div>
+                                                                <div className="col-md-5">
+                                                                    <input type="text" className="form-control" value={this.state.subject}
+                                                                           onChange={(e)=>this.setState({subject: e.target.value})}
+                                                                           placeholder="Add Subject"/>
+                                                                </div>
                                                             </div>
-                                                            {!imagePreviewUrl && <div className="upload-btn-wrapper">
-                                                                <button className="btn">Select Image</button>
-                                                                <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
-                                                            </div> }
+
+                                                            <div className="row mt30">
+                                                                <div className="col-md-3">
+                                                                    <label className="colorGray">Image<span className="required">*</span></label>
+                                                                </div>
+                                                                <div className="col-md-5">
+                                                                    <div >
+                                                                        {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                                        {imagePreviewUrl&&<figure className="browseImg">
+                                                                            <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                                        </figure> }
+                                                                    </div>
+                                                                    {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                                        <button className="btn">Select Image</button>
+                                                                        <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                                    </div> }
+                                                                </div>
+                                                            </div>
+                                                            {/*<div className="text-center">*/}
+                                                                {/*<label className="errorcolor">*/}
+                                                                    {/*{ subjectError && <div>{subjectError}</div> }*/}
+                                                                {/*</label><br/>*/}
+                                                                {/*<button type="submit" className="btn btn-login float-right" disabled={!this.state.subject || !this.state.file || this.state.disableButton}>Submit</button>*/}
+                                                            {/*</div>*/}
+
+                                                            <div className="row mt30">
+                                                                <div className="col-md-2">
+                                                                    <button type="submit" className="btn btn-default" disabled={!this.state.subject || !this.state.file || this.state.disableButton}>
+                                                                        Submit
+                                                                    </button>
+                                                                </div>
+
+                                                            </div>
+
                                                         </div>
-                                                    </div>
 
-                                                    <div className="row mt30">
-                                                        <div className="col-md-2">
-                                                            <button type="submit" className="btn btn-default ">
-                                                                Submit
-                                                            </button>
-                                                        </div>
-
-                                                    </div>
-
+                                                    </form>
                                                 </div>
-
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <h3>Subjects List</h3>
 
-                                <div className="gridTable">
-                                    <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
-                                        <thead>
-                                        <tr>
-                                            <th>image</th>
-                                            <th>Name</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {subjectsList }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <br/>
                     <div id="standards" className="tab-pane fade">
                         <div id="standards" className="tab-pane fade in active">
                             <div className="row">
-                                <div >
+                                <div className="displayStandards" >
+                                    <h3>Standards List</h3>
+                                    <div className="gridTable">
+                                        <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {standardsList }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="addStandards">
                                     <div className="cardWidget">
                                         <div className="cardBottom">
                                             <div className="row">
@@ -366,32 +401,16 @@ class Data extends React.Component {
                                                                        onChange={(e)=>this.setState({standard: e.target.value})}
                                                                        placeholder="Add Standard"/>
                                                             </div>
-                                                            <div className="col-md-4">
-                                                                <button type="submit"  className="btn btn-default">
-                                                                    Submit
-                                                                </button>
+                                                            <div className="col-md-2">
+                                                            <button type="submit" className="btn btn-default" disabled={!this.state.standard}>
+                                                            Submit
+                                                            </button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div >
-                                    <h3>Standards List</h3>
-                                    <div className="gridTable">
-                                        <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
-                                            <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {standardsList }
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>

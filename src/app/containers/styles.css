@@ -1354,7 +1354,34 @@ a.article, a.article:hover {
     margin: 10px 5px 0 0;
     display: inline-block;
 }
-
+.profileView{
+    margin-bottom: 15px;
+}
+.profilePic{
+    width: 100px;
+    border-radius: 50%;
+    height: 100px;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+.addSubject{
+    width: 45%;
+    float: left;
+}
+.addStandards{
+    width: 45%;
+    float: left;
+    margin-top: 15px;
+}
+.displaySubject,.displayStandards{
+    width: 50%;
+    float: left;
+    padding: 20px;
+    margin: 10px;
+    margin-top: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.16);
+}
 .codeDisplay{
     background: #fff;
     padding: 30px;

@@ -19,7 +19,8 @@ class Addvideo extends React.Component {
             image:"",
             file:"",
             imagePreviewUrl:"",
-            isDemo:(props.data && props.data.isDemo)?props.data.isDemo:false
+            isDemo:(props.data && props.data.isDemo)?props.data.isDemo:false,
+            disabled:false
         };
         this._handleSubmit = this._handleSubmit.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -51,9 +52,11 @@ class Addvideo extends React.Component {
     }
     onSubmit(e) {
         e.preventDefault();
+        this.setState({disabled:true})
         const {url, title, description, subject, standard,file,image,isDemo} = this.state;
         if(!(title && url && subject && standard)){
             this.props.setVideoError("Fill All Required Fields")
+            this.setState({disabled:false})
         }else {
             if(file){
                 this.props.uploadImage(file).then((result, err)=> {
@@ -71,6 +74,7 @@ class Addvideo extends React.Component {
                         this.props.setProgress(0);
                         this.props.setVideoError("");
                         document.getElementById("test").value = ""
+                        this.setState({disabled:false})
                         this.setState({
                             title: "",
                             description: "",
@@ -97,7 +101,8 @@ class Addvideo extends React.Component {
                         // this.props.setProgress(0);
                         this.props.setVideoError("");
                         document.getElementById("test").value = ""
-                        this.setState({
+                    this.setState({disabled:false})
+                    this.setState({
                             title: "",
                             description: "",
                             uri: "",
@@ -301,7 +306,7 @@ class Addvideo extends React.Component {
                                             </button>
                                         </div>
                                         <div className="col-md-6">
-                                            <button type="button" className="btn blackButton" onClick={this.onSubmit} disabled={!this.state.url}
+                                            <button type="button" className="btn blackButton" onClick={this.onSubmit} disabled={!this.state.url || this.state.disabled}
                                                     style={{width: "100%"}}>Submit
                                             </button>
                                         </div>

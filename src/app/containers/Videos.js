@@ -90,56 +90,64 @@ class Videos extends React.Component {
                        backgroundColor={'white'} // default is black
                        opacity="0.4" // default is .9
                    >
-                       {this.props.videos.length > 0 ? this.props.videos.map((video)=> {
-                           return (
-                               <div className="container, col-md-3" key={video._id} style={{textAlign:"left"}}>
-                                   <div  className="panel panel-default productWidget">
-                                       <div className="panel-heading">
-                                           <div className="row">
-                                               <div className="col-md-10">
-                                                   <div className="videoTitle"> {video.title}</div>
+
+                       <div className="container-fluid">
+                           <div className="row">
+                               {this.props.videos.length > 0 ? this.props.videos.map((video)=> {
+                                   return (
+                                       <div className="col-md-3" key={video._id} style={{textAlign:"left"}}>
+                                           <div  className="panel panel-default productWidget">
+                                               <div className="panel-heading">
+                                                   <div className="row">
+                                                       <div className="col-md-9">
+                                                           <div className="videoTitle"> {video.title}</div>
+                                                       </div>
+                                                       <div className="col-md-3">
+                                                           <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+                                                               this.props.setSelectedVideo(video)
+                                                           }} data-toggle="modal" data-target="#editVideo">
+                                                               <span className="glyphicon glyphicon-pencil"/>
+                                                           </button>
+                                                       </div>
+                                                   </div>
                                                </div>
-                                               <div className="col-md-2">
-                                                   <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                                                       this.props.setSelectedVideo(video)
-                                                   }} data-toggle="modal" data-target="#editVideo">
-                                                       <span className="glyphicon glyphicon-pencil"/>
-                                                   </button>
+                                               <div className="panel-body">
+                                                   <video  controls controlsList="nodownload" className="videoDisplay" poster={video.videoThumbnail ? video.videoThumbnail : "https://vrscience.s3.ap-south-1.amazonaws.com/no-thumbnail.jpg" }>
+                                                       <source src={video.url}/>
+                                                   </video>
+                                               </div>
+                                               <div className="panel-footer">
+                                                   <div className="row">
+                                                       <div className="col-md-8">
+                                                           <p ><strong>Subject :</strong> <strong ><span
+                                                               className="label label-primary">{(video.subject && video.subject.name ) ? (video.subject.name):"No Subject"}</span></strong> </p>
+                                                       </div>
+                                                   </div>
+                                                   <div className="row">
+                                                       <div className="col-md-7">
+                                                           <p ><strong>Standard : </strong><strong><span style={{marginLeft:"auto"}}
+                                                                                                         className="label label-success">{(video.standard && video.standard.name) ? (video.standard.name) :"No Standard"}</span></strong> </p>
+                                                       </div>
+                                                       <div className="col-md-5">
+                                                           <button type="button" className="btn btn-default btn-sm" onClick={()=> {
+                                                               this.onDeleteVideo(video)
+                                                           }}>
+                                                               <span className="glyphicon glyphicon-trash" /> Delete
+                                                           </button>
+                                                       </div>
+                                                   </div>
                                                </div>
                                            </div>
                                        </div>
-                                       <div className="panel-body">
-                                           <video  controls controlsList="nodownload" className="videoDisplay" poster={video.videoThumbnail ? video.videoThumbnail : "https://vrscience.s3.ap-south-1.amazonaws.com/no-thumbnail.jpg" }>
-                                               <source src={video.url}/>
-                                           </video>
-                                       </div>
-                                       <div className="panel-footer">
-                                           <div className="row">
-                                               <div className="col-md-8">
-                                                   <p ><strong>Subject :</strong> <strong ><span
-                                                       className="label label-primary">{(video.subject && video.subject.name ) ? (video.subject.name):"No Subject"}</span></strong> </p>
-                                               </div>
-                                           </div>
-                                           <div className="row">
-                                               <div className="col-md-8">
-                                                   <p ><strong>Standard : </strong><strong><span style={{marginLeft:"auto"}}
-                                                       className="label label-success">{(video.standard && video.standard.name) ? (video.standard.name) :"No Standard"}</span></strong> </p>
-                                               </div>
-                                               <div className="col-md-4">
-                                                   <button type="button" className="btn btn-default btn-sm" onClick={()=> {
-                                                       this.onDeleteVideo(video)
-                                                   }}>
-                                                       <span className="glyphicon glyphicon-trash" /> Delete
-                                                   </button>
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
 
 
-                           )
-                       }) : <h2 className="notFound">"No Videos Found"</h2> }
+                                   )
+                               }) : <h2 className="notFound">"No Videos Found"</h2> }
+                           </div>
+
+                       </div>
+
+
                    </OverlayLoader>
                </div>
         )
