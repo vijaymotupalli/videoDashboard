@@ -288,80 +288,86 @@ class Data extends React.Component {
                     <div id="subjects" className="tab-pane fade in active">
                         <div id="subjects" className="tab-pane fade in active">
                                 <div className="row">
-                                    <div className="displaySubject">
-                                        <h3>Subjects List</h3>
-                                        <div className="gridTable">
-                                            <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
-                                                <thead>
-                                                <tr>
-                                                    <th>image</th>
-                                                    <th>Name</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {subjectsList }
-                                                </tbody>
-                                            </table>
+                                    <div className="col-md-6">
+                                        <div className="displaySubject">
+                                            <h3>Subjects List</h3>
+                                            <div className="gridTable">
+                                                <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>image</th>
+                                                        <th>Name</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {subjectsList }
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="addSubject">
-                                        <div className="cardWidget customCard">
-                                            <div className="cardBottom">
-                                                <div className="row">
-                                                    <form onSubmit={this.submitSubject}>
-                                                        <div className="form-group">
-                                                            <div className="row mt30">
-                                                                <div className="col-md-3">
-                                                                    <label className="colorGray">Subject<span className="required">*</span></label>
-                                                                </div>
-                                                                <div className="col-md-5">
-                                                                    <input type="text" className="form-control" value={this.state.subject}
-                                                                           onChange={(e)=>this.setState({subject: e.target.value})}
-                                                                           placeholder="Add Subject"/>
-                                                                </div>
-                                                            </div>
 
-                                                            <div className="row mt30">
-                                                                <div className="col-md-3">
-                                                                    <label className="colorGray">Image<span className="required">*</span></label>
-                                                                </div>
-                                                                <div className="col-md-5">
-                                                                    <div >
-                                                                        {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
-                                                                        {imagePreviewUrl&&<figure className="browseImg">
-                                                                            <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
-                                                                        </figure> }
+                                    <div className="col-md-6">
+                                        <div className="addSubject">
+                                            <div className="cardWidget customCard">
+                                                <div className="cardBottom">
+                                                    <div className="row">
+                                                        <form onSubmit={this.submitSubject}>
+                                                            <div className="form-group">
+                                                                <div className="row mt30">
+                                                                    <div className="col-md-3">
+                                                                        <label className="colorGray">Subject<span className="required">*</span></label>
                                                                     </div>
-                                                                    {!imagePreviewUrl && <div className="upload-btn-wrapper">
-                                                                        <button className="btn">Select Image</button>
-                                                                        <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
-                                                                    </div> }
+                                                                    <div className="col-md-5">
+                                                                        <input type="text" className="form-control" value={this.state.subject}
+                                                                               onChange={(e)=>this.setState({subject: e.target.value})}
+                                                                               placeholder="Add Subject"/>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            {/*<div className="text-center">*/}
+
+                                                                <div className="row mt30">
+                                                                    <div className="col-md-3">
+                                                                        <label className="colorGray">Image<span className="required">*</span></label>
+                                                                    </div>
+                                                                    <div className="col-md-5">
+                                                                        <div >
+                                                                            {imagePreviewUrl &&<div className="glyphicon corner" onClick={this.clearImage}>&#xe088;</div>}
+                                                                            {imagePreviewUrl&&<figure className="browseImg">
+                                                                                <img src={this.state.imagePreviewUrl} style={{width:"100%",marginTop:"10px"}} />
+                                                                            </figure> }
+                                                                        </div>
+                                                                        {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                                            <button className="btn">Select Image</button>
+                                                                            <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                                        </div> }
+                                                                    </div>
+                                                                </div>
+                                                                {/*<div className="text-center">*/}
                                                                 {/*<label className="errorcolor">*/}
-                                                                    {/*{ subjectError && <div>{subjectError}</div> }*/}
+                                                                {/*{ subjectError && <div>{subjectError}</div> }*/}
                                                                 {/*</label><br/>*/}
                                                                 {/*<button type="submit" className="btn btn-login float-right" disabled={!this.state.subject || !this.state.file || this.state.disableButton}>Submit</button>*/}
-                                                            {/*</div>*/}
+                                                                {/*</div>*/}
 
-                                                            <div className="row mt30">
-                                                                <div className="col-md-2">
-                                                                    <button type="submit" className="btn btn-default" disabled={!this.state.subject || !this.state.file || this.state.disableButton}>
-                                                                        Submit
-                                                                    </button>
+                                                                <div className="row mt30">
+                                                                    <div className="col-md-2">
+                                                                        <button type="submit" className="btn btn-default" disabled={!this.state.subject || !this.state.file || this.state.disableButton}>
+                                                                            Submit
+                                                                        </button>
+                                                                    </div>
+
                                                                 </div>
 
                                                             </div>
 
-                                                        </div>
-
-                                                    </form>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                         </div>
@@ -370,49 +376,55 @@ class Data extends React.Component {
                     <div id="standards" className="tab-pane fade">
                         <div id="standards" className="tab-pane fade in active">
                             <div className="row">
-                                <div className="displayStandards" >
-                                    <h3>Standards List</h3>
-                                    <div className="gridTable">
-                                        <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
-                                            <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {standardsList }
-                                            </tbody>
-                                        </table>
+                                <div className="col-md-6">
+                                    <div className="displayStandards" >
+                                        <h3>Standards List</h3>
+                                        <div className="gridTable">
+                                            <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {standardsList }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="addStandards">
-                                    <div className="cardWidget">
-                                        <div className="cardBottom">
-                                            <div className="row">
-                                                <form onSubmit={this.submitStandard}>
-                                                    <div className="form-group addbox">
-                                                        <div className="row mt30">
-                                                            <div className="col-md-3">
-                                                                <label className="colorGray">Standard<span className="required">*</span></label>
-                                                            </div>
-                                                            <div className="col-md-5">
-                                                                <input type="text" className="form-control" value={this.state.standard}
-                                                                       onChange={(e)=>this.setState({standard: e.target.value})}
-                                                                       placeholder="Add Standard"/>
-                                                            </div>
-                                                            <div className="col-md-2">
-                                                            <button type="submit" className="btn btn-default" disabled={!this.state.standard}>
-                                                            Submit
-                                                            </button>
+
+                                <div className="col-md-6">
+                                    <div className="addStandards">
+                                        <div className="cardWidget">
+                                            <div className="cardBottom">
+                                                <div className="row">
+                                                    <form onSubmit={this.submitStandard}>
+                                                        <div className="form-group addbox">
+                                                            <div className="row mt30">
+                                                                <div className="col-md-3">
+                                                                    <label className="colorGray">Standard<span className="required">*</span></label>
+                                                                </div>
+                                                                <div className="col-md-5">
+                                                                    <input type="text" className="form-control" value={this.state.standard}
+                                                                           onChange={(e)=>this.setState({standard: e.target.value})}
+                                                                           placeholder="Add Standard"/>
+                                                                </div>
+                                                                <div className="col-md-2">
+                                                                    <button type="submit" className="btn btn-default" disabled={!this.state.standard}>
+                                                                        Submit
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

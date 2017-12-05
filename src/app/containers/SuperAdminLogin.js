@@ -19,7 +19,7 @@ class SuperAdminLogin extends React.Component {
     componentWillMount(props){
         if (localStorage.getItem("loginuser")) {
             this.props.setLoginSuccess(true);
-            this.props.history.push("/dashboard/videos")
+            this.props.history.push("/dashboard/myprofile")
         }else this.props.setLoginSuccess(false);
     }
 
@@ -27,7 +27,7 @@ class SuperAdminLogin extends React.Component {
         e.preventDefault();
         const {email, password} = this.state;
         this.props.login(email, password).then((result)=>{
-            this.props.history.push("/dashboard/videos")
+            this.props.history.push("/dashboard/myprofile")
         });
         this.setState({
             email: '',

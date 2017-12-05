@@ -249,6 +249,12 @@ div.dataTables_wrapper div.dataTables_info {
     width:200px;
     padding-top: 30px;
 }
+.text_right{
+    text-align: right;
+}
+.text_left{
+    text-align: left;
+}
 
 .videoGrid {
     width: 20%;
@@ -260,6 +266,10 @@ div.dataTables_wrapper div.dataTables_info {
 .videoDisplay{
     width: 100%;
     height: 130px;
+}
+.video{
+    width: 100%;
+    height: 100%;
 }
 .notFound{
     margin-left: 33%;
@@ -402,6 +412,7 @@ div.dataTables_wrapper div.dataTables_paginate {
     background: none !important;
     border:0 !important;
 }
+
 .title{
     font-size: 18px;
     font-weight:600;
@@ -551,12 +562,15 @@ div.dataTables_wrapper div.dataTables_paginate {
     box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.16);
     background: #fff;
     border-radius: 0;
-    margin-bottom: 10px;
     margin-left: 10px;
-    float: left;
     margin-top: 10px;
-    width: 100%;
+    margin-bottom: 30px;
+    height: 350px;
 }
+.panel-footer {
+    background-color: #fff;
+}
+
 .productWidget .panel-heading p{
     color: #757575;
     margin: 0;
@@ -972,6 +986,10 @@ a, a:hover, a:focus {
     padding: 20px;
     background: #6d7fcc;
 }
+.menuHeight{
+    max-height: 300px;
+    overflow: auto;
+}
 
 #sidebar ul.components {
     padding: 20px 0;
@@ -1068,7 +1086,7 @@ a.article, a.article:hover {
         margin-left: 0px;
     }
     #toggleMenu.active {
-        margin-left: 0;
+        margin-left: 0px;
     }
     #sidebarCollapse span {
         display: none;
@@ -1288,6 +1306,13 @@ a.article, a.article:hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     margin: 80px 0 0 0;
 }
+.videoCard{
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    margin: 20px 0 0 0;
+    height:320px;
+}
 
 .forgotPassword{
     float: right;
@@ -1365,17 +1390,17 @@ a.article, a.article:hover {
     margin: 0 auto 10px auto;
 }
 .addSubject{
-    width: 45%;
-    float: left;
+    width: 100%;
+
 }
 .addStandards{
-    width: 45%;
-    float: left;
+    width: 100%;
+
     margin-top: 15px;
 }
 .displaySubject,.displayStandards{
-    width: 50%;
-    float: left;
+    width: 100%;
+
     padding: 20px;
     margin: 10px;
     margin-top: 15px;
@@ -1392,7 +1417,8 @@ a.article, a.article:hover {
 .codeDisplayNew{
     background: #fff;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-    margin: 30px 10px 0 15px;
+    margin: 30px 10px 10px 30px;
+    padding: 10px;
 }
 
 .code{
