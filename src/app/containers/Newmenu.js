@@ -3,6 +3,8 @@ import {Route, Link, Switch} from 'react-router-dom';
 import './styles.css';
 import {NavLink} from 'react-router-dom';
 import {connect} from "react-redux";
+import {getMyProfile} from "../actions/index";
+
 
 class Menu extends React.Component {
     constructor(props) {
@@ -15,6 +17,7 @@ class Menu extends React.Component {
             institute:false,
             userName:"",profilePic:""
         }
+        this.props.getMyProfile()
         this.onSignout = this.onSignout.bind(this)
     }
     componentWillMount(){
@@ -48,8 +51,21 @@ class Menu extends React.Component {
 
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState ({
+            userName: nextProps.myprofile.email,
+            profilePic: nextProps.myprofile.profilePic
+        });
+
+    }
+
     onSignout(e) {
         localStorage.clear()
+    }
+    clickLink() {
+     if(screen.width <= 768 ){
+         document.getElementById("sidebarCollapse").click()
+     }
     }
 
     render() {
@@ -73,32 +89,31 @@ class Menu extends React.Component {
                     </div>
 
                     <div className="mainLinks">
-                        <NavLink to={match.url + '/myprofile'} activeClassName="active" exact><span
-                            className="glyphicon glyphicon-user"/> My Profile </NavLink>
-
-                        { this.state.qlab && <NavLink to={match.url + '/data'} activeClassName="active"  exact>
+                        <NavLink to={match.url + '/myprofile'} activeClassName="active" onClick={this.clickLink} exact><span
+                            className="glyphicon glyphicon-user" /> My Profile </NavLink>
+                        { this.state.qlab && <NavLink to={match.url + '/data'} activeClassName="active" onClick={this.clickLink} exact>
                             <span className="glyphicon glyphicon-file"/> Data </NavLink>
                         }
 
-                            {this.state.qlab && <NavLink to={match.url + '/contentuploaders'} activeClassName="active"  exact>
+                            {this.state.qlab && <NavLink to={match.url + '/contentuploaders'} activeClassName="active" onClick={this.clickLink} exact>
                                 <span className="glyphicon glyphicon-film" /> Content Uploaders </NavLink>}
 
-                        {this.state.qlab && <NavLink to={match.url + '/superadmins'} activeClassName="active"  exact>
+                        {this.state.qlab && <NavLink to={match.url + '/superadmins'} activeClassName="active" onClick={this.clickLink} exact>
                                 <span className="glyphicon glyphicon-stats" /> Super Admins </NavLink>}
 
-                        {(this.state.superAdmin || this.state.qlab) && <NavLink to={match.url + '/institutes'} activeClassName="active"  exact>
+                        {(this.state.superAdmin || this.state.qlab) && <NavLink to={match.url + '/institutes'} activeClassName="active" onClick={this.clickLink}  exact>
                                 <span className="glyphicon glyphicon-home" /> Institutes </NavLink>}
 
-                        {(this.state.qlab || this.state.institute) && <NavLink to={match.url + '/users'} activeClassName="active"  exact>
+                        {(this.state.qlab || this.state.institute) && <NavLink to={match.url + '/users'} activeClassName="active"  onClick={this.clickLink} exact>
                             <span className="glyphicon glyphicon-th-list"/> Users </NavLink>}
 
-                        {(this.state.qlab || this.state.contentUploader) &&   <NavLink to={match.url + '/videos'} activeClassName="active" exact><span
+                        {(this.state.qlab || this.state.contentUploader) &&   <NavLink to={match.url + '/videos'} activeClassName="active" onClick={this.clickLink} exact><span
                             className="glyphicon glyphicon-facetime-video"/> Videos </NavLink> }
 
-                        { (this.state.qlab || this.state.contentUploader)  && <NavLink to={match.url + '/demovideos'} activeClassName="active"  exact>
+                        { (this.state.qlab || this.state.contentUploader)  && <NavLink to={match.url + '/demovideos'} activeClassName="active"  onClick={this.clickLink} exact>
                             <span className="glyphicon glyphicon-film"/> Demo Videos </NavLink>
                         }
-                        { this.state.qlab && <NavLink to={match.url + '/codes'} activeClassName="active"  exact>
+                        { this.state.qlab && <NavLink to={match.url + '/codes'} activeClassName="active"   onClick={this.clickLink} exact>
                             <span className="glyphicon glyphicon-qrcode"/> Codes </NavLink>
                         }
 
@@ -123,14 +138,17 @@ const mapStateToProps = (state) => {
     return {
         isLoginPending: state.Login.isLoginPending,
         isLoginSuccess: state.Login.isLoginSuccess,
-        loginError: state.Login.loginError
+        loginError: state.Login.loginError,
+        myprofile: state.Admin.myprofile
     };
 };
 
 
 const mapDispatchToProps = (dispatch)=> {
 
-    return {};
+    return {
+        getMyProfile:()=> dispatch(getMyProfile())
+    };
 
 }
 

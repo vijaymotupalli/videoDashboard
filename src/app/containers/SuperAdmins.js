@@ -66,7 +66,7 @@ class User extends React.Component {
                             </button>
                         </div>
                     </div>
-                    <div className="gridTable">
+                    <div className="gridTable table-responsive">
                         <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
                             <thead>
                             <tr>

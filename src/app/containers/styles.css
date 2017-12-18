@@ -348,7 +348,7 @@ div.dataTables_wrapper div.dataTables_info {
 .gridTable{
     background: #fff;
     padding: 15px;
-    margin: 15px 0 0 0;
+    margin: 15px 0 0 15px;
 }
 .gridTasks{
     background: #fff;
