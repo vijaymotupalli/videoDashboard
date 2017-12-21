@@ -1,5 +1,5 @@
 import React from "react";
-import {editUser,setUserError} from "../actions/index";
+import {editUser,setUserError,uploadVideo} from "../actions/index";
 import {connect} from "react-redux";
 import './styles.css';
 
@@ -13,10 +13,15 @@ class EditUser extends React.Component {
             name: props.selectedUser.name,
             username: props.selectedUser.userName,
             phone: props.selectedUser.phone,
-            error: ""
+            error: "",
+            image:props.selectedUser.profilePic ? props.selectedUser.profilePic:"",
+            file:"",
+            imagePreviewUrl:props.selectedUser.profilePic ? props.selectedUser.profilePic:"",
 
         };
         this.onSubmit = this.onSubmit.bind(this)
+        this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
     }
     componentWillReceiveProps(nextProps){
         this.setState ({
@@ -24,7 +29,9 @@ class EditUser extends React.Component {
             email: nextProps.selectedUser.email,
             name: nextProps.selectedUser.name,
             username: nextProps.selectedUser.userName,
-            phone: nextProps.selectedUser.phone
+            phone: nextProps.selectedUser.phone,
+            image:nextProps.selectedUser.profilePic ? nextProps.selectedUser.profilePic:"",
+            imagePreviewUrl:nextProps.selectedUser.profilePic ? nextProps.selectedUser.profilePic:""
 
         });
     }
@@ -32,16 +39,47 @@ class EditUser extends React.Component {
         e.preventDefault();
         this.setState({error:""})
         this.props.setUserError("");
-        const {email, name, phone ,address,_id } = this.state;
+        const {email, name, phone ,address,_id,file } = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
-        })}else {
+        })}else if(!file){
             this.props.editUser(_id,{name: name,address:address,email:email}).then((result,err)=> {
                 document.getElementById("close").click()
             })
+        }else{
+            this.props.uploadVideo(file).then((result, err)=> {
+                var logoUrl = JSON.parse(result)
+                this.setState({image: logoUrl[0],imagePreviewUrl:logoUrl[0]})
+                this.props.editUser(_id,{name: name,address:address,email:email,profilePic:this.state.image}).then((result,err)=> {
+                    document.getElementById("close").click()
+                })
+            })
         }
+
+
     }
+    clearImage(){
+        this.setState({imagePreviewUrl:""})
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
+    }
+
     render() {
+        let {imagePreviewUrl} = this.state;
         return (
             <div>
                 <div className="container" >
@@ -54,6 +92,27 @@ class EditUser extends React.Component {
                                 </div>
                                 <div className="modal-body">
                                     <form>
+
+                                        <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">Profile Pic</label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <div >
+                                                        {imagePreviewUrl &&<div className="glyphicon corner "  style={{width:"50%"}} onClick={this.clearImage}>&#xe088;</div>}
+                                                        {imagePreviewUrl&&<figure className="browseImg">
+                                                            <img src={this.state.imagePreviewUrl} style={{width:"50%",marginTop:"10px"}} />
+                                                        </figure> }
+                                                    </div>
+                                                    {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                        <button className="btn">Select Image</button>
+                                                        <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                    </div> }
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-3">
@@ -138,6 +197,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        uploadVideo: (file) => dispatch(uploadVideo(file)),
         editUser: (userId,user) => dispatch(editUser(userId,user)),
         setUserError: (error) => dispatch(setUserError(error)),
 

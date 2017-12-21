@@ -1,5 +1,5 @@
 import React from "react";
-import {addUser,setUserError,getSchools} from "../actions/index";
+import {addUser,setUserError,getSchools,uploadVideo} from "../actions/index";
 import {connect} from "react-redux";
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './styles.css';
@@ -16,30 +16,64 @@ class Adduser extends React.Component {
             phone:"",
             address:"",
             school:"",
-            error: ""
+            error: "",
+            image:"",
+            file:"",
+            imagePreviewUrl:""
         };
 
         this.onSubmit = this.onSubmit.bind(this)
+        this._handleImageChange = this._handleImageChange.bind(this)
+        this.clearImage = this.clearImage.bind(this)
+    }
+
+
+    clearImage(){
+        this.setState({imagePreviewUrl:""})
+    }
+
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
     }
 
     onSubmit(e) {
         e.preventDefault();
         this.setState({error:""})
         this.props.setUserError("");
-        const {email, name,password,phone,address,school,username} = this.state;
+        const {email, name,password,phone,address,school,username,file} = this.state;
         if(!((/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(email))){ this.setState({
             error: "Email Not Valid"
         })}else {
-            this.props.addUser({username:username,email: email, name: name, password:password,school:school,phone:phone,address:address}).then((result,err)=> {
-                if(!err){
-                    this.setState({
-                        username:"",email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false
-                    })
-                }
+            this.props.uploadVideo(file).then((result, err)=> {
+                var logoUrl = JSON.parse(result)
+                this.setState({image: logoUrl[0]})
+                this.props.addUser({username:username,email: email, name: name, password:password,school:school,phone:phone,address:address,profilePic:this.state.image}).then((result,err)=> {
+                    if(!err){
+                        this.setState({
+                            username:"",email:"",name:"",school:"",password:"",error:"",phone:"",address:"",isSchool:false,file:"",image:"",imagePreviewUrl:""
+                        })
+                    }
+                })
             })
+
         }
     }
     render() {
+
+        let {imagePreviewUrl} = this.state;
+
         var schools = this.props.schools ? this.props.schools : []
         var listSchools = schools.map(function (school) {
             return (
@@ -58,6 +92,27 @@ class Adduser extends React.Component {
                                 </div>
                                 <div className="modal-body">
                                     <form>
+
+                                        <div className="form-group modalFields">
+                                            <div className="row mt30">
+                                                <div className="col-md-3">
+                                                    <label className="colorGray">Profile Pic</label>
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <div >
+                                                        {imagePreviewUrl &&<div className="glyphicon corner" style={{width:"50%"}} onClick={this.clearImage}>&#xe088;</div>}
+                                                        {imagePreviewUrl&&<figure className="browseImg">
+                                                            <img src={this.state.imagePreviewUrl} style={{width:"50%",marginTop:"10px"}} />
+                                                        </figure> }
+                                                    </div>
+                                                    {!imagePreviewUrl && <div className="upload-btn-wrapper">
+                                                        <button className="btn">Select Image</button>
+                                                        <input type="file" name="myfile" onChange={(e)=>this._handleImageChange(e)}/>
+                                                    </div> }
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div className="form-group modalFields">
                                             <div className="row mt30">
                                                 <div className="col-md-3">
@@ -199,6 +254,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        uploadVideo: (file) => dispatch(uploadVideo(file)),
         getSchools: ()=> dispatch(getSchools()),
         addUser: (admin) => dispatch(addUser(admin)),
         setUserError: (error) => dispatch(setUserError(error)),

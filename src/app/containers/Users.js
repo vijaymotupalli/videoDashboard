@@ -8,6 +8,8 @@ import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
 import 'style-loader!react-confirm-alert/src/react-confirm-alert.css'
 
 import {Route, Link, Switch} from 'react-router-dom';
+import moment from 'moment'
+
 
 class User extends React.Component {
     constructor(props) {
@@ -39,11 +41,12 @@ class User extends React.Component {
         var listUsers = users.map(function (user) {
             return (
                 <tr key={user._id} onClick={()=>this.selectedUser(user)}>
+                    <td><img src={user.profilePic ? user.profilePic : "https://vrscience.s3.ap-south-1.amazonaws.com/480px-No_image_available.svg.png"}/></td>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.phone}</td>
                     <td>{user.school ? "School" : "User"}</td>
-                    <td>{user.createdAt}</td>
+                    <td>{moment(user.createdAt).format('LL')}</td>
                     <td>
                         <button  className="btn blackButton" onClick={(e)=>{e.stopPropagation();this.onDeleteUser(user._id)}}>Remove</button>
                     </td>
@@ -67,6 +70,7 @@ class User extends React.Component {
                         <table className="table table-striped table-bordered" cellSpacing="0" width="100%">
                             <thead>
                             <tr>
+                                <th>Profile Pic</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>

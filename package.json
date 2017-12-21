@@ -25,6 +25,7 @@
     "react-fileupload-progress": "^0.4.0",
     "react-hot-loader": "^3.1.3",
     "react-loading-overlay": "^0.2.8",
+    "react-notify-toast": "^0.4.0",
     "react-overlay-loading": "^1.0.3",
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.2.2",
