@@ -129,7 +129,7 @@ export function login(email, password) {
                     dispatch(setLoginError("Network Error"));
                     reject("Network Error")
                 }
-            });
+            })
         })
 
     }

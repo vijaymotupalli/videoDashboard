@@ -53,7 +53,7 @@ class Menu extends React.Component {
 
     componentWillReceiveProps(nextProps){
         this.setState ({
-            userName: nextProps.myprofile.email,
+            userName: nextProps.myprofile.name,
             profilePic: nextProps.myprofile.profilePic
         });
 
@@ -72,7 +72,7 @@ class Menu extends React.Component {
         const {match} = this.props
         return (
         <div>
-            <div className="header">Welcome To VR Science</div>
+            <div className="header"> Welcome To VR Science</div>
             <div className="container-fluid" >
                 <div id="sidebar" className="sidenav">
                     <div className="profileView">

@@ -29,7 +29,7 @@ class Admin extends React.Component {
     render(){
         const {match} = this.props
         return (
-            <div className="totalBlock,container-fluid">
+            <div className="totalBlock,container-fluid" id="panelBg">
                 {/*<div ><Route  component={Menu} /></div>*/}
                 <div ><Route  component={Newmenu} /></div>
                 <div  id="toggleMenu">

@@ -107,7 +107,9 @@ class Myprofile extends React.Component {
         const {password,confirmPassword } = this.state;
         if(!password || !confirmPassword){
             this.setState({error:"Please Enter Password and Confirm Password"})
-        }else{
+        }else if(password != confirmPassword){
+            this.setState({error:"Password and Confirm Password Not Matched"})
+        }else {
             this.props.changePassword({email:email,password:password}).then((result)=> {
                 this.setState({password:"",confirmPassword:""})
                 localStorage.clear();

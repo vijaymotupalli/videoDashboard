@@ -39,11 +39,12 @@ class SuperAdminLogin extends React.Component {
         const {match} = this.props
         let {isLoginPending, isLoginSuccess, loginError} = this.props;
         return (
-            <div>
-                <section className="login-block" >
-                    <div className="container login">
+            <div id="loginBg">
+                <section className="login-block"  >
+                    <div className="container login" >
                         <div className="row">
                             <div className="login-sec">
+                                <img src="https://vrsciencelive.s3.ap-south-1.amazonaws.com/LOGO_NEW_QLAB.png" id="loginLogo"/>
                                 <h2 className="text-center">Login Now</h2>
                                 <form className="login-form" onSubmit={this.onSubmit}>
                                     <div className="form-group">

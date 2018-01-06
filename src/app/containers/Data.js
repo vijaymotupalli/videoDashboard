@@ -314,6 +314,7 @@ class Data extends React.Component {
                                                 <div className="cardBottom">
                                                     <div className="row">
                                                         <form onSubmit={this.submitSubject}>
+                                                            <h3>Add Subjects</h3>
                                                             <div className="form-group">
                                                                 <div className="row mt30">
                                                                     <div className="col-md-3">
@@ -401,6 +402,7 @@ class Data extends React.Component {
                                             <div className="cardBottom">
                                                 <div className="row">
                                                     <form onSubmit={this.submitStandard}>
+                                                        <h3>Add Standard</h3>
                                                         <div className="form-group addbox">
                                                             <div className="row mt30">
                                                                 <div className="col-md-3">
